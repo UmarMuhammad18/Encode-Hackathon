@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PokéAgent — Home & Collection Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+<title>PokéAgent — AI Trading Assistant</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,7 +37,6 @@ body {
   min-height: 100vh;
 }
 
-/* grain texture */
 body::after {
   content: '';
   position: fixed;
@@ -48,7 +47,7 @@ body::after {
   opacity: 0.6;
 }
 
-/* ── Header (updated with nav) ── */
+/* Header & Navigation */
 .header {
   background: var(--ink);
   color: var(--cream);
@@ -68,7 +67,6 @@ body::after {
   font-family: var(--font-head);
   font-size: 15px;
   font-weight: 700;
-  letter-spacing: -0.3px;
   cursor: pointer;
 }
 .logo-dot {
@@ -80,14 +78,12 @@ body::after {
 }
 .logo span { color: var(--yellow); }
 
-/* navigation buttons */
 .nav-links {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   background: rgba(255,255,255,0.05);
   padding: 4px;
   border-radius: 40px;
-  backdrop-filter: blur(2px);
 }
 .nav-btn {
   background: transparent;
@@ -106,7 +102,7 @@ body::after {
   color: var(--ink);
   box-shadow: var(--shadow);
 }
-.nav-btn:not(.active):hover {
+.nav-btn:hover:not(.active) {
   background: rgba(255,255,255,0.1);
   color: var(--cream);
 }
@@ -127,14 +123,36 @@ body::after {
   align-items: center;
   gap: 6px;
 }
-.header-stat strong { color: var(--cream); font-family: var(--font-head); font-size: 13px; }
+.header-stat strong { color: var(--cream); font-family: var(--font-head); }
+.mobile-toggle, .logout-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: var(--font-head);
+  color: var(--cream);
+  cursor: pointer;
+}
 
-/* ── HOMEPAGE STYLES ── */
+/* Page Container */
+.page {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.page.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== HOMEPAGE STYLES ========== */
 .homepage {
   max-width: 1300px;
   margin: 0 auto;
   padding: 32px 28px 64px;
-  animation: fadeIn 0.45s ease;
 }
 .hero {
   text-align: center;
@@ -151,12 +169,6 @@ body::after {
   color: transparent;
   margin-bottom: 12px;
 }
-.hero-glow {
-  font-size: 1rem;
-  color: var(--ink3);
-  max-width: 560px;
-  margin: 0 auto;
-}
 .hero-badge {
   display: inline-block;
   background: var(--cream3);
@@ -166,7 +178,6 @@ body::after {
   font-weight: 500;
   margin-bottom: 20px;
   font-family: var(--font-head);
-  color: var(--ink2);
 }
 .stats-preview {
   display: flex;
@@ -181,22 +192,12 @@ body::after {
   padding: 18px 28px;
   min-width: 140px;
   box-shadow: var(--shadow);
-  border: 1px solid var(--border);
   text-align: center;
 }
 .stat-preview-card .number {
   font-family: var(--font-head);
   font-size: 2.2rem;
   font-weight: 800;
-  color: var(--ink);
-  line-height: 1;
-}
-.stat-preview-card .label {
-  font-size: 0.7rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--ink3);
-  margin-top: 6px;
 }
 .feature-grid {
   display: grid;
@@ -215,34 +216,6 @@ body::after {
 .feature-icon { font-size: 2rem; margin-bottom: 12px; }
 .feature h3 { font-family: var(--font-head); font-size: 1rem; margin-bottom: 6px; }
 .feature p { font-size: 0.8rem; color: var(--ink3); }
-
-.recent-title {
-  font-family: var(--font-head);
-  font-size: 1rem;
-  letter-spacing: -0.2px;
-  margin: 48px 0 18px;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-.recent-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 14px;
-}
-.recent-card {
-  background: white;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  padding: 12px 12px;
-  transition: all 0.15s;
-  cursor: pointer;
-}
-.recent-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--border2); }
-.recent-emoji { font-size: 36px; text-align: center; margin-bottom: 6px; }
-.recent-name { font-family: var(--font-head); font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.recent-set { font-size: 10px; color: var(--ink3); }
 .cta-button {
   background: var(--ink);
   color: var(--cream);
@@ -251,41 +224,46 @@ body::after {
   padding: 14px 32px;
   font-family: var(--font-head);
   font-weight: 600;
-  font-size: 14px;
   cursor: pointer;
-  transition: opacity 0.2s;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-top: 20px;
 }
-.cta-button:hover { opacity: 0.85; }
-
-/* ── Collection view (original layout, wrapped) ── */
-#collectionView {
-  display: none;
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
 }
-.app {
+.recent-card {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.recent-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.recent-emoji { font-size: 36px; text-align: center; margin-bottom: 6px; }
+.recent-name { font-family: var(--font-head); font-size: 12px; font-weight: 700; }
+
+/* ========== COLLECTION PAGE STYLES ========== */
+.collection-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: calc(100vh - 60px);
 }
-
-/* sidebar, main, cards etc — all original styles preserved */
 .sidebar {
   background: var(--cream2);
   border-right: 1px solid var(--border);
   padding: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
 }
 .sidebar-block {
   padding: 0 16px 20px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 20px;
 }
-.sidebar-block:last-child { border-bottom: none; margin-bottom: 0; }
 .sidebar-label {
   font-family: var(--font-head);
   font-size: 8px;
@@ -303,18 +281,13 @@ body::after {
   padding: 9px 12px 9px 34px;
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--ink);
-  outline: none;
 }
-.search-input:focus { border-color: var(--ink); }
 .search-icon {
   position: absolute;
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--ink3);
-  font-size: 14px;
-  pointer-events: none;
 }
 .filter-group { display: flex; flex-direction: column; gap: 4px; }
 .filter-btn {
@@ -324,15 +297,11 @@ body::after {
   padding: 7px 10px;
   border-radius: 7px;
   cursor: pointer;
-  font-size: 13px;
-  color: var(--ink2);
   background: transparent;
-  font-family: var(--font-body);
+  border: none;
   width: 100%;
   text-align: left;
-  border: none;
 }
-.filter-btn:hover { background: var(--cream3); }
 .filter-btn.active { background: var(--ink); color: var(--cream); }
 .filter-btn .count {
   font-size: 11px;
@@ -340,28 +309,18 @@ body::after {
   border-radius: 10px;
   padding: 1px 7px;
 }
-.filter-btn.active .count { background: rgba(255,255,255,0.15); }
-.rarity-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; flex-shrink: 0; }
 .sort-select {
   width: 100%;
   background: white;
   border: 1px solid var(--border2);
   border-radius: 8px;
   padding: 8px 10px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6159' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 30px;
 }
 .view-toggle {
   display: flex;
   background: var(--cream3);
   border-radius: 8px;
   padding: 3px;
-  gap: 2px;
 }
 .view-btn {
   flex: 1;
@@ -370,10 +329,8 @@ body::after {
   background: transparent;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  color: var(--ink3);
 }
-.view-btn.active { background: white; color: var(--ink); box-shadow: var(--shadow); }
+.view-btn.active { background: white; box-shadow: var(--shadow); }
 .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .mini-stat {
   background: white;
@@ -381,30 +338,22 @@ body::after {
   border-radius: 8px;
   padding: 10px;
 }
-.mini-stat-val { font-family: var(--font-head); font-size: 16px; font-weight: 700; margin-bottom: 2px; }
-.mini-stat-label { font-size: 10px; color: var(--ink3); }
-.main { padding: 24px; overflow-y: auto; }
+.mini-stat-val { font-family: var(--font-head); font-size: 16px; font-weight: 700; }
+.main-content { padding: 24px; overflow-y: auto; }
 .toolbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
-.toolbar-left { display: flex; align-items: center; gap: 10px; }
-.result-count { font-size: 13px; color: var(--ink3); }
-.result-count strong { color: var(--ink); font-family: var(--font-head); }
 .btn-add {
-  display: flex;
-  align-items: center;
-  gap: 7px;
   background: var(--ink);
   color: var(--cream);
   border: none;
   border-radius: 8px;
   padding: 9px 16px;
   font-family: var(--font-head);
-  font-size: 11px;
-  font-weight: 600;
   cursor: pointer;
 }
 .card-grid {
@@ -419,7 +368,7 @@ body::after {
   border-radius: var(--radius);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.18s, box-shadow 0.18s;
+  transition: transform 0.18s;
 }
 .poke-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .card-art {
@@ -428,18 +377,11 @@ body::after {
   align-items: center;
   justify-content: center;
   font-size: 52px;
-  position: relative;
-  overflow: hidden;
 }
-.card-art-emoji { position: relative; z-index: 1; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2)); }
-.card-info { padding: 10px 11px 11px; }
-.card-name-row { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.card-info { padding: 10px; }
 .card-name { font-family: var(--font-head); font-size: 11px; font-weight: 700; }
-.card-set { font-size: 11px; color: var(--ink3); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; }
-.card-condition { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
-.card-qty { font-size: 11px; color: var(--ink3); }
-.rarity-badge { font-size: 9px; padding: 1px 5px; border-radius: 3px; font-family: var(--font-head); letter-spacing: 0.5px; }
+.card-set { font-size: 10px; color: var(--ink3); }
+.card-footer { display: flex; justify-content: space-between; margin-top: 6px; }
 .card-list { display: none; flex-direction: column; gap: 6px; }
 .card-list.visible { display: flex; }
 .list-row {
@@ -459,12 +401,159 @@ body::after {
   gap: 12px;
   padding: 0 16px 8px;
   font-size: 10px;
-  letter-spacing: 1.5px;
   color: var(--ink3);
   text-transform: uppercase;
   font-family: var(--font-head);
 }
-.empty { text-align: center; padding: 60px 20px; color: var(--ink3); }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--ink3); }
+
+/* ========== AGENT PAGE STYLES ========== */
+.agent-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 28px;
+}
+.agent-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.agent-header h1 {
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+.security-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(58,110,168,0.1);
+  padding: 6px 14px;
+  border-radius: 40px;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.chat-container {
+  background: white;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.chat-messages {
+  height: 400px;
+  overflow-y: auto;
+  padding: 20px;
+  background: var(--cream2);
+}
+.message {
+  margin-bottom: 16px;
+  display: flex;
+}
+.message.user { justify-content: flex-end; }
+.message.agent { justify-content: flex-start; }
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.message.user .message-bubble {
+  background: var(--ink);
+  color: var(--cream);
+  border-bottom-right-radius: 4px;
+}
+.message.agent .message-bubble {
+  background: white;
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.chat-input-area {
+  display: flex;
+  padding: 16px;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+}
+.chat-input-area input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border2);
+  border-radius: 40px;
+  font-family: var(--font-body);
+}
+.chat-input-area button {
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 40px;
+  padding: 0 24px;
+  cursor: pointer;
+  font-family: var(--font-head);
+}
+.security-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink3);
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* ========== SECURITY PAGE STYLES ========== */
+.security-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 28px;
+}
+.security-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.security-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.security-card h3 {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rule-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--cream2);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.audit-log {
+  background: var(--cream2);
+  border-radius: 12px;
+  padding: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 11px;
+}
+.audit-entry {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink2);
+}
+
+/* Modals & Mobile Responsive */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -476,7 +565,6 @@ body::after {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
-  backdrop-filter: blur(3px);
 }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
 .modal {
@@ -486,36 +574,21 @@ body::after {
   max-width: 95vw;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 24px 64px rgba(26,22,18,0.25);
-  transform: translateY(12px);
-  transition: transform 0.2s;
 }
-.modal-overlay.open .modal { transform: translateY(0); }
 .modal-header {
   padding: 20px 24px 16px;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-.modal-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; }
-.modal-close {
-  width: 28px; height: 28px;
-  border: 1px solid var(--border2);
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  font-size: 14px;
 }
 .modal-body { padding: 20px 24px 24px; }
 .form-row { margin-bottom: 14px; }
 .form-label {
-  display: block;
   font-size: 11px;
   font-family: var(--font-head);
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
   text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
 }
 .form-input, .form-select {
   width: 100%;
@@ -523,8 +596,6 @@ body::after {
   border: 1px solid var(--border2);
   border-radius: 8px;
   padding: 9px 12px;
-  font-family: var(--font-body);
-  font-size: 13px;
 }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .btn-submit {
@@ -535,183 +606,516 @@ body::after {
   border-radius: 8px;
   padding: 11px;
   font-family: var(--font-head);
-  font-weight: 700;
   cursor: pointer;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 .btn-delete {
-  width: 100%;
   background: transparent;
   color: var(--red);
   border: 1px solid rgba(217,79,61,0.3);
   border-radius: 8px;
   padding: 9px;
-  font-family: var(--font-head);
   cursor: pointer;
-  margin-top: 8px;
+  width: 100%;
 }
-.btn-delete:hover { background: var(--red); color: white; }
+.detail-art {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.detail-field {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.detail-field-label { font-size: 10px; color: var(--ink3); text-transform: uppercase; }
+
+/* Mobile View */
+body.mobile-view .collection-layout { display: block; }
+body.mobile-view .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+body.mobile-view .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+body.mobile-view .list-row { grid-template-columns: 30px 2fr 1.5fr 70px 60px 30px; gap: 6px; }
+
 .cond-mint { background: rgba(58,140,92,0.12); color: var(--green); }
 .cond-nm { background: rgba(58,110,168,0.12); color: var(--blue); }
 .cond-lp { background: rgba(232,184,75,0.15); color: #a07a10; }
-.cond-mp { background: rgba(217,79,61,0.12); color: var(--red); }
-.cond-hp { background: rgba(124,92,191,0.12); color: var(--purple); }
-.cond-damaged { background: rgba(107,97,89,0.12); color: var(--ink3); }
-.rar-common { background: rgba(107,97,89,0.1); color: var(--ink3); }
-.rar-uncommon { background: rgba(58,140,92,0.1); color: var(--green); }
-.rar-rare { background: rgba(58,110,168,0.1); color: var(--blue); }
+.rar-common { background: rgba(107,97,89,0.1); }
 .rar-holo { background: rgba(232,184,75,0.15); color: #8a6a10; }
-.rar-ultra { background: rgba(217,79,61,0.12); color: var(--red); }
-.rar-secret { background: rgba(124,92,191,0.12); color: var(--purple); }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="logo" onclick="showHome()">
+  <div class="logo" onclick="navigateTo('home')">
     <div class="logo-dot">◆</div>
     Poké<span>Agent</span>
   </div>
   <div class="nav-links">
-    <button class="nav-btn" id="homeNavBtn" onclick="showHome()">🏠 Home</button>
-    <button class="nav-btn" id="collectionNavBtn" onclick="showCollection()">📦 Collection</button>
+    <button class="nav-btn" data-page="home" onclick="navigateTo('home')">🏠 Home</button>
+    <button class="nav-btn" data-page="collection" onclick="navigateTo('collection')">📦 Collection</button>
+    <button class="nav-btn" data-page="agent" onclick="navigateTo('agent')">🤖 Agent</button>
+    <button class="nav-btn" data-page="security" onclick="navigateTo('security')">🛡️ Security</button>
   </div>
   <div class="header-right">
     <div class="header-stat"><strong id="hTotal">0</strong> cards</div>
     <div class="header-stat"><strong id="hSets">0</strong> sets</div>
+    <button class="mobile-toggle" id="mobileToggleBtn">📱 Mobile</button>
+    <button class="logout-btn" id="logoutBtn" style="display: none;" onclick="logout()">🚪 Logout</button>
   </div>
 </header>
 
-<!-- HOMEPAGE SECTION -->
-<div id="homepageView" class="homepage">
+<!-- HOME PAGE -->
+<div id="homePage" class="page homepage">
   <div class="hero">
-    <div class="hero-badge">✨ POKÉMON COLLECTION MANAGER</div>
-    <h1>PokéAgent<br>Track, organize & admire.</h1>
-    <div class="hero-glow">The ultimate companion for collectors — log every card, filter by rarity, set, condition, and grow your Pokédex IRL.</div>
-    <button class="cta-button" onclick="showCollection()">📖 Enter Collection &nbsp;→</button>
+    <div class="hero-badge">✨ AI-POWERED COLLECTION MANAGER</div>
+    <h1>PokéAgent<br>Track, trade & protect.</h1>
+    <button class="cta-button" onclick="navigateTo('collection')">📖 Start Collecting →</button>
   </div>
-
   <div class="stats-preview" id="homeStats">
     <div class="stat-preview-card"><div class="number" id="homeTotal">0</div><div class="label">Total Cards</div></div>
     <div class="stat-preview-card"><div class="number" id="homeUnique">0</div><div class="label">Unique Cards</div></div>
-    <div class="stat-preview-card"><div class="number" id="homeSetsCount">0</div><div class="label">Different Sets</div></div>
-    <div class="stat-preview-card"><div class="number" id="homeHolos">0</div><div class="label">Holo / Ultra Rare</div></div>
+    <div class="stat-preview-card"><div class="number" id="homeSets">0</div><div class="label">Sets</div></div>
+    <div class="stat-preview-card"><div class="number" id="homeHolos">0</div><div class="label">Holos</div></div>
   </div>
-
   <div class="feature-grid">
-    <div class="feature"><div class="feature-icon">📇</div><h3>Smart filters</h3><p>Set, rarity, condition, language — find cards instantly.</p></div>
-    <div class="feature"><div class="feature-icon">📊</div><h3>Collection stats</h3><p>Live dashboard with totals, unique cards, and holo count.</p></div>
-    <div class="feature"><div class="feature-icon">🖼️</div><h3>Grid & List view</h3><p>Toggle between visual grid or detailed list layout.</p></div>
-    <div class="feature"><div class="feature-icon">💾</div><h3>Local storage</h3><p>All data stays in your browser — no account needed.</p></div>
+    <div class="feature"><div class="feature-icon">🛡️</div><h3>Civic Guardrails</h3><p>Prompt injection protection • Data privacy • Rate limiting</p></div>
+    <div class="feature"><div class="feature-icon">🤖</div><h3>AI Assistant</h3><p>Ask about your collection, get trading advice, track market prices</p></div>
+    <div class="feature"><div class="feature-icon">📊</div><h3>Live Analytics</h3><p>Collection stats, portfolio value, and market trends</p></div>
+    <div class="feature"><div class="feature-icon">🔒</div><h3>Secure by Design</h3><p>All inputs sanitized • Audit logging • Spending limits</p></div>
   </div>
-
-  <div class="recent-title">
-    <span>🕒 Recently added cards</span>
-    <button class="cta-button" style="padding: 6px 18px; font-size: 11px;" onclick="showCollection()">View all →</button>
-  </div>
-  <div id="recentCardsContainer" class="recent-grid">
-    <!-- dynamic recent cards -->
-  </div>
+  <h3 style="font-family:var(--font-head); margin-top: 40px;">🕒 Recently Added</h3>
+  <div id="recentCards" class="recent-grid"></div>
 </div>
 
-<!-- COLLECTION VIEW (original layout wrapped) -->
-<div id="collectionView">
-  <div class="app">
+<!-- COLLECTION PAGE -->
+<div id="collectionPage" class="page">
+  <div class="collection-layout">
     <aside class="sidebar">
-      <div class="sidebar-block">
-        <div class="sidebar-label">Search</div>
-        <div class="search-wrap"><span class="search-icon">⌕</span><input class="search-input" type="text" id="searchInput" placeholder="Card name…" oninput="applyFilters()"/></div>
-      </div>
-      <div class="sidebar-block">
-        <div class="sidebar-label">Collection Stats</div>
-        <div class="mini-stats"><div class="mini-stat"><div class="mini-stat-val" id="statTotal">0</div><div class="mini-stat-label">Total cards</div></div><div class="mini-stat"><div class="mini-stat-val" id="statUnique">0</div><div class="mini-stat-label">Unique</div></div><div class="mini-stat"><div class="mini-stat-val" id="statSets">0</div><div class="mini-stat-label">Sets</div></div><div class="mini-stat"><div class="mini-stat-val" id="statHolo">0</div><div class="mini-stat-label">Holos</div></div></div>
-      </div>
+      <div class="sidebar-block"><div class="sidebar-label">Search</div><div class="search-wrap"><span class="search-icon">⌕</span><input class="search-input" id="searchInput" placeholder="Card name…" oninput="applyFilters()"/></div></div>
+      <div class="sidebar-block"><div class="sidebar-label">Stats</div><div class="mini-stats"><div class="mini-stat"><div class="mini-stat-val" id="statTotal">0</div><div class="mini-stat-label">Total</div></div><div class="mini-stat"><div class="mini-stat-val" id="statUnique">0</div><div class="mini-stat-label">Unique</div></div><div class="mini-stat"><div class="mini-stat-val" id="statSets">0</div><div class="mini-stat-label">Sets</div></div><div class="mini-stat"><div class="mini-stat-val" id="statHolo">0</div><div class="mini-stat-label">Holos</div></div></div></div>
       <div class="sidebar-block"><div class="sidebar-label">Filter by Set</div><div class="filter-group" id="setFilters"></div></div>
       <div class="sidebar-block"><div class="sidebar-label">Filter by Rarity</div><div class="filter-group" id="rarityFilters"></div></div>
-      <div class="sidebar-block"><div class="sidebar-label">Sort By</div><select class="sort-select" id="sortSelect" onchange="applyFilters()"><option value="name">Name A–Z</option><option value="name-desc">Name Z–A</option><option value="set">Set</option><option value="rarity">Rarity</option><option value="condition">Condition</option><option value="qty-desc">Quantity ↓</option><option value="newest">Recently added</option></select></div>
+      <div class="sidebar-block"><div class="sidebar-label">Sort</div><select class="sort-select" id="sortSelect" onchange="applyFilters()"><option value="name">Name A–Z</option><option value="newest">Newest</option><option value="qty-desc">Quantity ↓</option></select></div>
       <div class="sidebar-block"><div class="sidebar-label">View</div><div class="view-toggle"><button class="view-btn active" id="btnGrid" onclick="setView('grid')">⊞ Grid</button><button class="view-btn" id="btnList" onclick="setView('list')">☰ List</button></div></div>
     </aside>
-    <main class="main">
-      <div class="toolbar"><div class="toolbar-left"><div class="result-count"><strong id="resultCount">0</strong> cards shown</div></div><button class="btn-add" onclick="openAddModal()"><span class="btn-add-icon">+</span> Add Card</button></div>
+    <main class="main-content">
+      <div class="toolbar"><div class="result-count"><strong id="resultCount">0</strong> cards</div><button class="btn-add" onclick="openAddModal()">+ Add Card</button></div>
       <div class="card-grid" id="cardGrid"></div>
       <div id="listHeader" class="list-header" style="display:none;"><span></span><span>Name</span><span>Set</span><span>Number</span><span>Condition</span><span>Qty</span><span></span></div>
       <div class="card-list" id="cardList"></div>
-      <div class="empty" id="emptyState" style="display:none;"><div class="empty-icon">📭</div><h3>No cards found</h3><p>Try adjusting your filters or add a new card.</p></div>
+      <div class="empty-state" id="emptyState" style="display:none;"><div class="empty-icon">📭</div><h3>No cards found</h3></div>
     </main>
   </div>
 </div>
 
-<!-- Add Modal -->
-<div class="modal-overlay" id="addModal"><div class="modal"><div class="modal-header"><div class="modal-title">Add Card to Collection</div><button class="modal-close" onclick="closeModal('addModal')">✕</button></div><div class="modal-body"><div class="form-row"><label class="form-label">Card Name *</label><input class="form-input" id="f-name" placeholder="e.g. Charizard"/></div><div class="form-grid"><div class="form-row"><label class="form-label">Set *</label><input class="form-input" id="f-set" placeholder="Base Set"/></div><div class="form-row"><label class="form-label">Card Number</label><input class="form-input" id="f-number" placeholder="4/102"/></div></div><div class="form-grid"><div class="form-row"><label class="form-label">Rarity</label><select class="form-select" id="f-rarity"><option value="Common">Common</option><option value="Uncommon">Uncommon</option><option value="Rare">Rare</option><option value="Holo Rare" selected>Holo Rare</option><option value="Ultra Rare">Ultra Rare</option><option value="Secret Rare">Secret Rare</option></select></div><div class="form-row"><label class="form-label">Condition</label><select class="form-select" id="f-condition"><option value="Mint">Mint</option><option value="Near Mint" selected>Near Mint</option><option value="Lightly Played">Lightly Played</option><option value="Moderately Played">Moderately Played</option><option value="Heavily Played">Heavily Played</option><option value="Damaged">Damaged</option></select></div></div><div class="form-grid"><div class="form-row"><label class="form-label">Quantity</label><input class="form-input" id="f-qty" type="number" min="1" value="1"/></div><div class="form-row"><label class="form-label">Language</label><select class="form-select" id="f-lang"><option value="English">English</option><option value="Japanese">Japanese</option><option value="German">German</option><option value="French">French</option><option value="Spanish">Spanish</option></select></div></div><div class="form-row"><label class="form-label">Notes</label><input class="form-input" id="f-notes" placeholder="PSA 9, signed ..."/></div><button class="btn-submit" onclick="addCard()">Add to Collection</button></div></div></div>
+<!-- AGENT PAGE -->
+<div id="agentPage" class="page agent-page">
+  <div class="agent-header">
+    <h1>🤖 PokéAgent Assistant</h1>
+    <p>Ask me anything about your collection, trading strategies, or market prices</p>
+    <div class="security-badge" id="agentSecurityBadge">🛡️ Civic Guardrails Active</div>
+  </div>
+  <div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+      <div class="message agent"><div class="message-bubble">✨ Hello! I'm PokéAgent, your AI trading assistant. Ask me about your collection, card values, or trading strategies. All conversations are protected by Civic guardrails.</div></div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="agentInput" placeholder="Ask about your collection...">
+      <button onclick="sendAgentMessage()">Send</button>
+    </div>
+  </div>
+  <div class="security-note">
+    <span>🔒 Prompt Injection Protection</span>
+    <span>📝 Sensitive Data Redaction</span>
+    <span>⏱️ Rate Limiting</span>
+    <span>📋 Audit Logging</span>
+  </div>
+</div>
 
-<!-- Detail Modal -->
-<div class="modal-overlay" id="detailModal"><div class="modal"><div class="modal-header"><div class="modal-title" id="d-title">Card Details</div><button class="modal-close" onclick="closeModal('detailModal')">✕</button></div><div class="modal-body"><div class="detail-art" id="d-art"></div><div class="detail-grid" id="d-grid"></div><button class="btn-delete" id="d-delete">Remove from collection</button></div></div></div>
+<!-- SECURITY PAGE -->
+<div id="securityPage" class="page security-page">
+  <div class="security-header">
+    <h1>🛡️ Civic Guardrails Dashboard</h1>
+    <p>Your AI assistant is protected by multiple layers of security</p>
+  </div>
+  <div class="security-card">
+    <h3>🛡️ Active Protections</h3>
+    <div class="rule-list">
+      <div class="rule-item">✅ Prompt Injection Detection</div>
+      <div class="rule-item">✅ Sensitive Data Redaction</div>
+      <div class="rule-item">✅ Harmful Content Filtering</div>
+      <div class="rule-item">✅ Rate Limiting (10/min)</div>
+      <div class="rule-item">✅ Spending Limits ($500/tx)</div>
+      <div class="rule-item">✅ Banned Card Keywords</div>
+      <div class="rule-item">✅ Output Sanitization</div>
+      <div class="rule-item">✅ Complete Audit Trail</div>
+    </div>
+  </div>
+  <div class="security-card">
+    <h3>📋 Security Audit Log</h3>
+    <div class="audit-log" id="auditLog">
+      <div class="audit-entry">Loading security events...</div>
+    </div>
+    <button class="btn-add" style="margin-top: 16px;" onclick="loadAuditLog()">Refresh Log</button>
+  </div>
+  <div class="security-card">
+    <h3>🔐 About Civic Guardrails</h3>
+    <p>Civic provides real-time AI safety monitoring. Every message you send is scanned for prompt injection attempts, sensitive data leaks, and harmful content. All security events are logged for transparency and accountability.</p>
+  </div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="loginModal"><div class="modal"><div class="modal-header"><div class="modal-title">Login / Signup</div><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div><div class="modal-body"><div class="form-row"><label class="form-label">Email</label><input class="form-input" id="loginEmail" type="email"/></div><div class="form-row"><label class="form-label">Password</label><input class="form-input" id="loginPassword" type="password"/></div><div style="display:flex; gap:12px;"><button class="btn-submit" onclick="authLogin()">Login</button><button class="btn-submit" style="background:var(--ink3);" onclick="authSignup()">Signup</button></div></div></div></div>
+<div class="modal-overlay" id="addModal"><div class="modal"><div class="modal-header"><div class="modal-title">Add Card</div><button class="modal-close" onclick="closeModal('addModal')">✕</button></div><div class="modal-body"><div class="form-row"><label class="form-label">Card Name *</label><input class="form-input" id="f-name"/></div><div class="form-row"><label class="form-label">Set *</label><input class="form-input" id="f-set"/></div><div class="form-grid"><div class="form-row"><label class="form-label">Rarity</label><select class="form-select" id="f-rarity"><option>Common</option><option>Uncommon</option><option>Rare</option><option>Holo Rare</option><option>Ultra Rare</option></select></div><div class="form-row"><label class="form-label">Condition</label><select class="form-select" id="f-condition"><option>Mint</option><option>Near Mint</option><option>Lightly Played</option></select></div></div><div class="form-grid"><div class="form-row"><label class="form-label">Quantity</label><input class="form-input" id="f-qty" type="number" value="1"/></div><div class="form-row"><label class="form-label">Language</label><select class="form-select" id="f-lang"><option>English</option><option>Japanese</option></select></div></div><button class="btn-submit" onclick="addCard()">Add</button></div></div></div>
+<div class="modal-overlay" id="detailModal"><div class="modal"><div class="modal-header"><div class="modal-title" id="d-title">Card Details</div><button class="modal-close" onclick="closeModal('detailModal')">✕</button></div><div class="modal-body"><div class="detail-art" id="d-art"></div><div class="detail-grid" id="d-grid"></div><button class="btn-delete" id="d-delete">Remove Card</button></div></div></div>
 
 <script>
-// ---- DATA & CORE LOGIC (preserved) ----
-const EMOJIS = { Charizard:'🔥',Blastoise:'💧',Venusaur:'🌿',Pikachu:'⚡',Mewtwo:'🔮',Mew:'✨',Gengar:'👻',Dragonite:'🐉',Snorlax:'💤',Eevee:'🦊',Umbreon:'🌙',Espeon:'🌟',Lugia:'🕊️',Ho_Oh:'🌈',Raichu:'⚡',Alakazam:'🧙',Machamp:'💪',Gyarados:'🌊',Lapras:'🧊',Vaporeon:'💙'};
-function getEmoji(name) { const key=name.replace(/[^a-zA-Z]/g,''); for(let k in EMOJIS) if(key.toLowerCase().includes(k.toLowerCase())) return EMOJIS[k]; return '🃏'; }
-const TYPE_COLORS = {'Base Set':'#e8b84b','Base Set 2':'#d4a832','Jungle':'#3a8c5c','Fossil':'#7c6b5a','Team Rocket':'#1a1612','Neo Genesis':'#5b8cc4','Neo Discovery':'#7c5cbf','Neo Revelation':'#d94f3d','Sword & Shield':'#e8b84b','Scarlet & Violet':'#d94f3d'};
-function getSetColor(set) { for(let k in TYPE_COLORS) if(set.includes(k)) return TYPE_COLORS[k]; return '#6b6159'; }
-const COND_MAP = {'Mint':'cond-mint','Near Mint':'cond-nm','Lightly Played':'cond-lp','Moderately Played':'cond-mp','Heavily Played':'cond-hp','Damaged':'cond-damaged'};
-const COND_SHORT = {'Mint':'M','Near Mint':'NM','Lightly Played':'LP','Moderately Played':'MP','Heavily Played':'HP','Damaged':'DM'};
-const RAR_MAP = {'Common':'rar-common','Uncommon':'rar-uncommon','Rare':'rar-rare','Holo Rare':'rar-holo','Ultra Rare':'rar-ultra','Secret Rare':'rar-secret'};
-const RAR_SHORT = {'Common':'◆','Uncommon':'◆◆','Rare':'★','Holo Rare':'★H','Ultra Rare':'★★','Secret Rare':'✦'};
+// ========== CONFIG & STATE ==========
+const API_BASE = 'http://localhost:5000/api';
+let authToken = localStorage.getItem('token');
+let collection = [];
+let activeSet = 'all', activeRarity = 'all', currentView = 'grid';
+let chatHistory = [];
 
-let collection = JSON.parse(localStorage.getItem('pokeagent-collection') || '[]');
-let activeSet = 'all', activeRarity = 'all', currentView = 'grid', detailIdx = null;
-if(collection.length===0){ collection = [
-  {id:1,name:'Charizard',set:'Base Set',number:'4/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'Shadowless',added:Date.now()-86400000*10},
-  {id:2,name:'Blastoise',set:'Base Set',number:'2/102',rarity:'Holo Rare',condition:'Lightly Played',qty:1,lang:'English',notes:'',added:Date.now()-86400000*8},
-  {id:3,name:'Venusaur',set:'Base Set',number:'15/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'',added:Date.now()-86400000*7},
-  {id:4,name:'Pikachu',set:'Jungle',number:'60/64',rarity:'Common',condition:'Mint',qty:3,lang:'English',notes:'',added:Date.now()-86400000*6},
-  {id:5,name:'Mewtwo',set:'Base Set',number:'10/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'Japanese',notes:'1st ed',added:Date.now()-86400000*5},
-  {id:6,name:'Lugia',set:'Neo Genesis',number:'9/111',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'',added:Date.now()-86400000*4},
-  {id:7,name:'Gengar',set:'Fossil',number:'5/62',rarity:'Holo Rare',condition:'Moderately Played',qty:1,lang:'English',notes:'',added:Date.now()-86400000*3},
-]; save(); }
-function save() { localStorage.setItem('pokeagent-collection', JSON.stringify(collection)); updateGlobalStats(); updateHomepageUI(); }
-function nextId() { return collection.length ? Math.max(...collection.map(c=>c.id))+1 : 1; }
-
-function updateGlobalStats(){
-  const total=collection.reduce((s,c)=>s+c.qty,0), unique=collection.length, sets=new Set(collection.map(c=>c.set)).size, holos=collection.filter(c=>c.rarity.includes('Holo')||c.rarity.includes('Ultra')||c.rarity.includes('Secret')).length;
-  document.getElementById('statTotal') && (document.getElementById('statTotal').textContent=total);
-  document.getElementById('statUnique') && (document.getElementById('statUnique').textContent=unique);
-  document.getElementById('statSets') && (document.getElementById('statSets').textContent=sets);
-  document.getElementById('statHolo') && (document.getElementById('statHolo').textContent=holos);
-  document.getElementById('hTotal') && (document.getElementById('hTotal').textContent=total);
-  document.getElementById('hSets') && (document.getElementById('hSets').textContent=sets);
+// ========== PAGE NAVIGATION ==========
+function navigateTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`${page}Page`).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.nav-btn[data-page="${page}"]`).classList.add('active');
+  
+  if (page === 'collection' && authToken) loadCollection();
+  if (page === 'home') updateHomeStats();
+  if (page === 'security' && authToken) loadAuditLog();
+  if (page === 'agent') loadChatHistory();
 }
-function updateHomepageUI(){
-  const total=collection.reduce((s,c)=>s+c.qty,0), unique=collection.length, sets=new Set(collection.map(c=>c.set)).size, holos=collection.filter(c=>c.rarity.includes('Holo')||c.rarity.includes('Ultra')).length;
-  document.getElementById('homeTotal') && (document.getElementById('homeTotal').innerText=total);
-  document.getElementById('homeUnique') && (document.getElementById('homeUnique').innerText=unique);
-  document.getElementById('homeSetsCount') && (document.getElementById('homeSetsCount').innerText=sets);
-  document.getElementById('homeHolos') && (document.getElementById('homeHolos').innerText=holos);
-  const recent = [...collection].sort((a,b)=>b.added - a.added).slice(0,6);
-  const container = document.getElementById('recentCardsContainer');
-  if(container){
-    container.innerHTML = recent.map(c=>`<div class="recent-card" onclick="showCollection()"><div class="recent-emoji">${getEmoji(c.name)}</div><div class="recent-name">${c.name}</div><div class="recent-set">${c.set}</div></div>`).join('');
-    if(recent.length===0) container.innerHTML = '<div class="empty-icon" style="text-align:center;">✨ Add your first card ✨</div>';
+
+// ========== AUTH ==========
+async function apiFetch(endpoint, options = {}) {
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+  const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+  if (res.status === 401) { logout(); throw new Error('Session expired'); }
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'API error');
+  return data;
+}
+
+async function authLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  try {
+    const data = await apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+    authToken = data.token;
+    localStorage.setItem('token', authToken);
+    closeModal('loginModal');
+    document.getElementById('logoutBtn').style.display = 'block';
+    await loadCollection();
+    updateHomeStats();
+    navigateTo('collection');
+  } catch (err) { alert('Login failed: ' + err.message); }
+}
+
+async function authSignup() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  try {
+    const data = await apiFetch('/auth/signup', { method: 'POST', body: JSON.stringify({ email, password, name: email.split('@')[0] }) });
+    authToken = data.token;
+    localStorage.setItem('token', authToken);
+    closeModal('loginModal');
+    document.getElementById('logoutBtn').style.display = 'block';
+    navigateTo('collection');
+  } catch (err) { alert('Signup failed: ' + err.message); }
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  authToken = null;
+  collection = [];
+  document.getElementById('logoutBtn').style.display = 'none';
+  navigateTo('home');
+  document.getElementById('loginModal').classList.add('open');
+}
+
+// ========== COLLECTION API ==========
+async function loadCollection() {
+  try {
+    collection = await apiFetch('/collection');
+    renderCollection();
+    updateGlobalStats();
+  } catch (err) { if (err.message.includes('Session')) logout(); }
+}
+
+async function addCard() {
+  const name = document.getElementById('f-name').value.trim();
+  const set = document.getElementById('f-set').value.trim();
+  if (!name || !set) { alert('Name and set required'); return; }
+  const card = {
+    name, set,
+    number: document.getElementById('f-number')?.value || '',
+    rarity: document.getElementById('f-rarity').value,
+    condition: document.getElementById('f-condition').value,
+    quantity: parseInt(document.getElementById('f-qty').value) || 1,
+    language: document.getElementById('f-lang').value,
+    notes: ''
+  };
+  try {
+    const newCard = await apiFetch('/collection', { method: 'POST', body: JSON.stringify(card) });
+    collection.push(newCard);
+    closeModal('addModal');
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-set').value = '';
+    renderCollection();
+    updateGlobalStats();
+    updateHomeStats();
+  } catch (err) { alert('Failed: ' + err.message); }
+}
+
+async function deleteCard(id) {
+  if (!confirm('Remove this card?')) return;
+  try {
+    await apiFetch(`/collection/${id}`, { method: 'DELETE' });
+    collection = collection.filter(c => c.id !== id);
+    closeModal('detailModal');
+    renderCollection();
+    updateGlobalStats();
+    updateHomeStats();
+  } catch (err) { alert('Delete failed: ' + err.message); }
+}
+
+// ========== RENDERING HELPERS ==========
+const EMOJIS = { Charizard:'🔥',Pikachu:'⚡',Mewtwo:'🔮',Gengar:'👻',Lugia:'🕊️',Eevee:'🦊' };
+function getEmoji(name) { for(let k in EMOJIS) if(name.includes(k)) return EMOJIS[k]; return '🃏'; }
+function getSetColor(set) { return '#e8b84b'; }
+
+function getFiltered() {
+  let q = document.getElementById('searchInput')?.value.toLowerCase() || '';
+  let results = collection.filter(c => {
+    if(q && !c.name.toLowerCase().includes(q) && !c.set.toLowerCase().includes(q)) return false;
+    if(activeSet !== 'all' && c.set !== activeSet) return false;
+    if(activeRarity !== 'all' && c.rarity !== activeRarity) return false;
+    return true;
+  });
+  const sort = document.getElementById('sortSelect')?.value || 'name';
+  if(sort === 'name') results.sort((a,b) => a.name.localeCompare(b.name));
+  if(sort === 'newest') results.sort((a,b) => new Date(b.addedAt) - new Date(a.addedAt));
+  if(sort === 'qty-desc') results.sort((a,b) => b.quantity - a.quantity);
+  return results;
+}
+
+function renderGrid(results) {
+  const grid = document.getElementById('cardGrid');
+  if(!grid) return;
+  grid.innerHTML = results.map(c => `
+    <div class="poke-card" onclick="openDetail('${c.id}')">
+      <div class="card-art" style="background:${getSetColor(c.set)}18;"><div class="card-art-emoji">${getEmoji(c.name)}</div></div>
+      <div class="card-info">
+        <div class="card-name">${c.name}</div>
+        <div class="card-set">${c.set}</div>
+        <div class="card-footer"><span class="card-condition cond-nm">${c.condition?.slice(0,2)}</span>${c.quantity > 1 ? `<span>×${c.quantity}</span>` : ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderList(results) {
+  const list = document.getElementById('cardList');
+  if(!list) return;
+  list.innerHTML = results.map(c => `
+    <div class="list-row" onclick="openDetail('${c.id}')">
+      <div class="list-emoji">${getEmoji(c.name)}</div>
+      <div class="list-name">${c.name}</div>
+      <div class="list-set">${c.set}</div>
+      <div class="list-number">${c.number || '—'}</div>
+      <div><span class="card-condition cond-nm">${c.condition}</span></div>
+      <div class="list-qty">${c.quantity}</div>
+      <div><span class="rarity-badge">${c.rarity?.slice(0,2)}</span></div>
+    </div>
+  `).join('');
+}
+
+function buildSetFilters() {
+  const sets = {};
+  collection.forEach(c => { sets[c.set] = (sets[c.set]||0) + c.quantity; });
+  const el = document.getElementById('setFilters');
+  if(!el) return;
+  el.innerHTML = `<button class="filter-btn ${activeSet==='all'?'active':''}" onclick="filterSet('all')">All <span class="count">${collection.reduce((s,c)=>s+c.quantity,0)}</span></button>`;
+  Object.entries(sets).forEach(([set,cnt]) => {
+    el.innerHTML += `<button class="filter-btn ${activeSet===set?'active':''}" onclick="filterSet('${set}')">${set} <span class="count">${cnt}</span></button>`;
+  });
+}
+
+function buildRarityFilters() {
+  const rars = {};
+  collection.forEach(c => { rars[c.rarity] = (rars[c.rarity]||0) + 1; });
+  const el = document.getElementById('rarityFilters');
+  if(!el) return;
+  el.innerHTML = `<button class="filter-btn ${activeRarity==='all'?'active':''}" onclick="filterRarity('all')">All <span class="count">${collection.length}</span></button>`;
+  Object.entries(rars).forEach(([r,cnt]) => {
+    el.innerHTML += `<button class="filter-btn ${activeRarity===r?'active':''}" onclick="filterRarity('${r}')">${r} <span class="count">${cnt}</span></button>`;
+  });
+}
+
+function filterSet(s) { activeSet = s; applyFilters(); }
+function filterRarity(r) { activeRarity = r; applyFilters(); }
+
+function applyFilters() {
+  buildSetFilters();
+  buildRarityFilters();
+  const results = getFiltered();
+  renderGrid(results);
+  renderList(results);
+  const resultSpan = document.getElementById('resultCount');
+  if(resultSpan) resultSpan.textContent = results.length;
+  const emptySpan = document.getElementById('emptyState');
+  if(emptySpan) emptySpan.style.display = results.length === 0 ? 'block' : 'none';
+}
+
+function setView(v) {
+  currentView = v;
+  const grid = document.getElementById('cardGrid');
+  const list = document.getElementById('cardList');
+  const header = document.getElementById('listHeader');
+  if(v === 'grid') {
+    grid.classList.remove('hidden');
+    list.classList.remove('visible');
+    if(header) header.style.display = 'none';
+  } else {
+    grid.classList.add('hidden');
+    list.classList.add('visible');
+    if(header) header.style.display = 'grid';
+  }
+  document.getElementById('btnGrid')?.classList.toggle('active', v==='grid');
+  document.getElementById('btnList')?.classList.toggle('active', v==='list');
+}
+
+function renderCollection() { applyFilters(); }
+
+function updateGlobalStats() {
+  const total = collection.reduce((s,c)=>s+c.quantity,0);
+  const unique = collection.length;
+  const sets = new Set(collection.map(c=>c.set)).size;
+  const holos = collection.filter(c=>c.rarity?.includes('Holo')).length;
+  document.getElementById('statTotal') && (document.getElementById('statTotal').textContent = total);
+  document.getElementById('statUnique') && (document.getElementById('statUnique').textContent = unique);
+  document.getElementById('statSets') && (document.getElementById('statSets').textContent = sets);
+  document.getElementById('statHolo') && (document.getElementById('statHolo').textContent = holos);
+  document.getElementById('hTotal') && (document.getElementById('hTotal').textContent = total);
+  document.getElementById('hSets') && (document.getElementById('hSets').textContent = sets);
+}
+
+function updateHomeStats() {
+  const total = collection.reduce((s,c)=>s+c.quantity,0);
+  const unique = collection.length;
+  const sets = new Set(collection.map(c=>c.set)).size;
+  const holos = collection.filter(c=>c.rarity?.includes('Holo')).length;
+  document.getElementById('homeTotal') && (document.getElementById('homeTotal').textContent = total);
+  document.getElementById('homeUnique') && (document.getElementById('homeUnique').textContent = unique);
+  document.getElementById('homeSets') && (document.getElementById('homeSets').textContent = sets);
+  document.getElementById('homeHolos') && (document.getElementById('homeHolos').textContent = holos);
+  
+  const recent = [...collection].sort((a,b)=>new Date(b.addedAt) - new Date(a.addedAt)).slice(0,6);
+  const container = document.getElementById('recentCards');
+  if(container) {
+    container.innerHTML = recent.map(c => `<div class="recent-card" onclick="navigateTo('collection')"><div class="recent-emoji">${getEmoji(c.name)}</div><div class="recent-name">${c.name}</div><div class="recent-set">${c.set}</div></div>`).join('');
   }
 }
-function getFiltered(){ let q=document.getElementById('searchInput')?.value.toLowerCase().trim()||''; let res=collection.filter(c=>{ if(q && !c.name.toLowerCase().includes(q) && !c.set.toLowerCase().includes(q)) return false; if(activeSet!=='all' && c.set!==activeSet) return false; if(activeRarity!=='all' && c.rarity!==activeRarity) return false; return true; }); const sort=document.getElementById('sortSelect')?.value||'name'; res.sort((a,b)=>{ if(sort==='name') return a.name.localeCompare(b.name); if(sort==='name-desc') return b.name.localeCompare(a.name); if(sort==='set') return a.set.localeCompare(b.set); if(sort==='rarity') return a.rarity.localeCompare(b.rarity); if(sort==='condition') return a.condition.localeCompare(b.condition); if(sort==='qty-desc') return b.qty-a.qty; if(sort==='newest') return b.added-a.added; return 0; }); return res; }
-function renderGrid(results){ const grid=document.getElementById('cardGrid'); if(!grid)return; grid.innerHTML=''; results.forEach((c,i)=>{ const div=document.createElement('div'); div.className='poke-card'; div.innerHTML=`<div class="card-art" style="background:${getSetColor(c.set)}18;"><div class="card-art-emoji">${getEmoji(c.name)}</div></div><div class="card-info"><div class="card-name">${c.name}</div><div class="card-set">${c.set}${c.number?' · '+c.number:''}</div><div class="card-footer"><span class="card-condition ${COND_MAP[c.condition]}">${COND_SHORT[c.condition]}</span><span class="rarity-badge ${RAR_MAP[c.rarity]}">${RAR_SHORT[c.rarity]}</span>${c.qty>1?`<span class="card-qty">×${c.qty}</span>`:''}</div></div>`; div.onclick=()=>openDetail(c.id); grid.appendChild(div); }); }
-function renderList(results){ const list=document.getElementById('cardList'); if(!list)return; list.innerHTML=''; results.forEach((c,i)=>{ const div=document.createElement('div'); div.className='list-row'; div.innerHTML=`<div class="list-emoji">${getEmoji(c.name)}</div><div><div class="list-name">${c.name}</div>${c.lang!=='English'?`<div style="font-size:10px;">${c.lang}</div>`:''}</div><div class="list-set">${c.set}</div><div class="list-number">${c.number||'—'}</div><div><span class="card-condition ${COND_MAP[c.condition]}">${c.condition}</span></div><div class="list-qty">${c.qty}</div><div><span class="rarity-badge ${RAR_MAP[c.rarity]}">${RAR_SHORT[c.rarity]}</span></div>`; div.onclick=()=>openDetail(c.id); list.appendChild(div); }); }
-function buildSetFilters(){ const sets={}; collection.forEach(c=>{ sets[c.set]=(sets[c.set]||0)+c.qty; }); const el=document.getElementById('setFilters'); if(!el)return; el.innerHTML=`<button class="filter-btn ${activeSet==='all'?'active':''}" onclick="filterSet('all')">All sets <span class="count">${collection.reduce((s,c)=>s+c.qty,0)}</span></button>`; Object.entries(sets).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([set,cnt])=>{ const col=getSetColor(set); el.innerHTML+=`<button class="filter-btn ${activeSet===set?'active':''}" onclick="filterSet('${set.replace(/'/g,"\\'")}')"><span style="display:flex;gap:6px;"><span class="rarity-dot" style="background:${col};"></span>${set}</span><span class="count">${cnt}</span></button>`; }); }
-function buildRarityFilters(){ const rars={}; collection.forEach(c=>{ rars[c.rarity]=(rars[c.rarity]||0)+1; }); const ORDER=['Common','Uncommon','Rare','Holo Rare','Ultra Rare','Secret Rare']; const el=document.getElementById('rarityFilters'); if(!el)return; el.innerHTML=`<button class="filter-btn ${activeRarity==='all'?'active':''}" onclick="filterRarity('all')">All rarities <span class="count">${collection.length}</span></button>`; ORDER.filter(r=>rars[r]).forEach(r=>{ el.innerHTML+=`<button class="filter-btn ${activeRarity===r?'active':''}" onclick="filterRarity('${r}')"><span>${RAR_SHORT[r]} ${r}</span><span class="count">${rars[r]}</span></button>`; }); }
-function applyFilters(){ buildSetFilters(); buildRarityFilters(); const results=getFiltered(); renderGrid(results); renderList(results); updateGlobalStats(); const resultCountSpan=document.getElementById('resultCount'); if(resultCountSpan) resultCountSpan.textContent=results.length; const emptyDiv=document.getElementById('emptyState'); if(emptyDiv) emptyDiv.style.display=results.length===0?'block':'none'; }
-function filterSet(s){ activeSet=s; applyFilters(); }
-function filterRarity(r){ activeRarity=r; applyFilters(); }
-function setView(v){ currentView=v; const grid=document.getElementById('cardGrid'); const list=document.getElementById('cardList'); const listHeader=document.getElementById('listHeader'); if(grid&&list){ if(v==='grid'){ grid.classList.remove('hidden'); list.classList.remove('visible'); if(listHeader)listHeader.style.display='none'; } else { grid.classList.add('hidden'); list.classList.add('visible'); if(listHeader)listHeader.style.display='grid'; } document.getElementById('btnGrid')?.classList.toggle('active',v==='grid'); document.getElementById('btnList')?.classList.toggle('active',v==='list'); } }
-function openAddModal(){ document.getElementById('addModal').classList.add('open'); }
-function addCard(){ const name=document.getElementById('f-name').value.trim(); const set=document.getElementById('f-set').value.trim(); if(!name||!set){ alert('Name and set required'); return; } const card={id:nextId(),name,set,number:document.getElementById('f-number').value.trim(),rarity:document.getElementById('f-rarity').value,condition:document.getElementById('f-condition').value,qty:parseInt(document.getElementById('f-qty').value)||1,lang:document.getElementById('f-lang').value,notes:document.getElementById('f-notes').value.trim(),added:Date.now()}; collection.unshift(card); save(); closeModal('addModal'); document.getElementById('f-name').value=''; document.getElementById('f-set').value=''; document.getElementById('f-number').value=''; document.getElementById('f-notes').value=''; activeSet='all'; activeRarity='all'; applyFilters(); updateHomepageUI(); }
-function openDetail(id){ const c=collection.find(x=>x.id===id); if(!c)return; detailIdx=id; document.getElementById('d-title').textContent=c.name; const color=getSetColor(c.set); document.getElementById('d-art').style.background=`${color}22`; document.getElementById('d-art').innerHTML=`<span style="font-size:72px;">${getEmoji(c.name)}</span>`; document.getElementById('d-grid').innerHTML=`<div class="detail-field"><div class="detail-field-label">Set</div><div>${c.set}</div></div><div class="detail-field"><div class="detail-field-label">Number</div><div>${c.number||'—'}</div></div><div class="detail-field"><div class="detail-field-label">Rarity</div><div><span class="rarity-badge ${RAR_MAP[c.rarity]}">${c.rarity}</span></div></div><div class="detail-field"><div class="detail-field-label">Condition</div><div><span class="card-condition ${COND_MAP[c.condition]}">${c.condition}</span></div></div><div class="detail-field"><div class="detail-field-label">Qty</div><div>${c.qty}</div></div><div class="detail-field"><div class="detail-field-label">Language</div><div>${c.lang}</div></div>${c.notes?`<div class="detail-field" style="grid-column:span2;"><div class="detail-field-label">Notes</div><div>${c.notes}</div></div>`:''}`; document.getElementById('d-delete').onclick=()=>{ if(confirm('Remove card?')){ collection=collection.filter(crd=>crd.id!==id); save(); closeModal('detailModal'); applyFilters(); updateHomepageUI(); } }; document.getElementById('detailModal').classList.add('open'); }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o=>{ o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); }); });
-function showHome(){ document.getElementById('homepageView').style.display='block'; document.getElementById('collectionView').style.display='none'; document.getElementById('homeNavBtn').classList.add('active'); document.getElementById('collectionNavBtn').classList.remove('active'); updateHomepageUI(); }
-function showCollection(){ document.getElementById('homepageView').style.display='none'; document.getElementById('collectionView').style.display='block'; document.getElementById('collectionNavBtn').classList.add('active'); document.getElementById('homeNavBtn').classList.remove('active'); applyFilters(); setView(currentView); }
-window.onload=()=>{ updateGlobalStats(); updateHomepageUI(); showHome(); };
+
+function openDetail(id) {
+  const card = collection.find(c => c.id === id);
+  if(!card) return;
+  document.getElementById('d-title').textContent = card.name;
+  document.getElementById('d-art').innerHTML = `<span style="font-size:64px;">${getEmoji(card.name)}</span>`;
+  document.getElementById('d-grid').innerHTML = `
+    <div class="detail-field"><div class="detail-field-label">Set</div><div>${card.set}</div></div>
+    <div class="detail-field"><div class="detail-field-label">Rarity</div><div>${card.rarity}</div></div>
+    <div class="detail-field"><div class="detail-field-label">Condition</div><div>${card.condition}</div></div>
+    <div class="detail-field"><div class="detail-field-label">Quantity</div><div>${card.quantity}</div></div>
+  `;
+  document.getElementById('d-delete').onclick = () => deleteCard(card.id);
+  document.getElementById('detailModal').classList.add('open');
+}
+
+// ========== AGENT CHAT ==========
+async function sendAgentMessage() {
+  const input = document.getElementById('agentInput');
+  const question = input.value.trim();
+  if (!question) return;
+  
+  const messagesDiv = document.getElementById('chatMessages');
+  messagesDiv.innerHTML += `<div class="message user"><div class="message-bubble">${escapeHtml(question)}</div></div>`;
+  input.value = '';
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+  messagesDiv.innerHTML += `<div class="message agent"><div class="message-bubble">🤔 Thinking... <span class="security-badge" style="font-size:10px;">Civic scanning</span></div></div>`;
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+  try {
+    const data = await apiFetch('/agent/ask', { method: 'POST', body: JSON.stringify({ question }) });
+    const lastMsg = messagesDiv.lastElementChild;
+    if(lastMsg && lastMsg.innerHTML.includes('Thinking')) lastMsg.remove();
+    messagesDiv.innerHTML += `<div class="message agent"><div class="message-bubble">${escapeHtml(data.answer)}</div></div>`;
+    document.getElementById('agentSecurityBadge').innerHTML = '✅ Civic Verified';
+    setTimeout(() => document.getElementById('agentSecurityBadge').innerHTML = '🛡️ Civic Guardrails Active', 2000);
+  } catch (err) {
+    const lastMsg = messagesDiv.lastElementChild;
+    if(lastMsg && lastMsg.innerHTML.includes('Thinking')) lastMsg.remove();
+    messagesDiv.innerHTML += `<div class="message agent"><div class="message-bubble">❌ Error: ${err.message}</div></div>`;
+  }
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function loadChatHistory() {
+  const messagesDiv = document.getElementById('chatMessages');
+  if(messagesDiv.children.length === 0) {
+    messagesDiv.innerHTML = `<div class="message agent"><div class="message-bubble">✨ Hello! I'm PokéAgent, your AI trading assistant. Ask me about your collection, card values, or trading strategies. All conversations are protected by Civic guardrails.</div></div>`;
+  }
+}
+
+// ========== SECURITY ==========
+async function loadAuditLog() {
+  try {
+    const data = await apiFetch('/agent/security/audit');
+    const logDiv = document.getElementById('auditLog');
+    if(logDiv && data.logs) {
+      logDiv.innerHTML = data.logs.map(log => `<div class="audit-entry">[${new Date(log.timestamp).toLocaleString()}] ${log.eventType}${log.details ? ' - ' + JSON.stringify(log.details).slice(0,100) : ''}</div>`).join('');
+      if(data.logs.length === 0) logDiv.innerHTML = '<div class="audit-entry">No security events yet. Your interactions have been clean!</div>';
+    }
+  } catch (err) {
+    console.error('Audit log error:', err);
+  }
+}
+
+// ========== UTILITIES ==========
+function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+
+// Mobile toggle
+document.getElementById('mobileToggleBtn').addEventListener('click', () => {
+  document.body.classList.toggle('mobile-view');
+  document.getElementById('mobileToggleBtn').textContent = document.body.classList.contains('mobile-view') ? '💻 Desktop' : '📱 Mobile';
+});
+
+// Modal close
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target === o) o.classList.remove('open'); }));
+
+// Init
+window.onload = () => {
+  if (!authToken) {
+    document.getElementById('loginModal').classList.add('open');
+  } else {
+    document.getElementById('logoutBtn').style.display = 'block';
+    loadCollection();
+  }
+  navigateTo('home');
+};
 </script>
 </body>
 </html>
