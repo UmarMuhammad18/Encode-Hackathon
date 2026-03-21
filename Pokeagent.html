@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-<title>PokéAgent — Collection + AI Agent</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PokéAgent — My Collection</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +35,6 @@ body {
   font-family: var(--font-body);
   font-size: 14px;
   min-height: 100vh;
-  transition: all 0.2s;
 }
 
 /* grain texture */
@@ -61,8 +60,6 @@ body::after {
   position: sticky;
   top: 0;
   z-index: 100;
-  gap: 12px;
-  flex-wrap: wrap;
 }
 .logo {
   display: flex;
@@ -72,7 +69,6 @@ body::after {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.3px;
-  cursor: pointer;
 }
 .logo-dot {
   width: 28px; height: 28px;
@@ -82,11 +78,10 @@ body::after {
   font-size: 13px;
 }
 .logo span { color: var(--yellow); }
-
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 .header-stat {
   font-size: 12px;
@@ -101,7 +96,7 @@ body::after {
 }
 .header-stat strong { color: var(--cream); font-family: var(--font-head); font-size: 13px; }
 
-/* Mobile toggle button */
+/* mobile toggle button */
 .mobile-toggle {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
@@ -117,36 +112,14 @@ body::after {
   background: rgba(255,255,255,0.2);
 }
 
-/* ── Responsive modes ── */
-body.mobile-view .app {
-  display: block;
-}
-body.mobile-view .sidebar {
-  width: 100%;
-  border-right: none;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 16px;
-}
-body.mobile-view .main {
-  padding: 20px;
-}
-body.mobile-view .card-grid {
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-}
-body.mobile-view .list-row {
-  grid-template-columns: 30px 2fr 1.5fr 80px 70px 30px;
-  gap: 8px;
-  font-size: 12px;
-}
-
-/* ── Layout (default desktop) ── */
+/* ── Layout ── */
 .app {
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: calc(100vh - 60px);
 }
 
-/* Sidebar styles (same as original) */
+/* ── Sidebar ── */
 .sidebar {
   background: var(--cream2);
   border-right: 1px solid var(--border);
@@ -169,7 +142,11 @@ body.mobile-view .list-row {
   text-transform: uppercase;
   margin-bottom: 10px;
 }
-.search-wrap { position: relative; }
+
+/* Search */
+.search-wrap {
+  position: relative;
+}
 .search-input {
   width: 100%;
   background: white;
@@ -180,6 +157,7 @@ body.mobile-view .list-row {
   font-size: 13px;
   color: var(--ink);
   outline: none;
+  transition: border-color 0.15s;
 }
 .search-input:focus { border-color: var(--ink); }
 .search-icon {
@@ -189,7 +167,10 @@ body.mobile-view .list-row {
   transform: translateY(-50%);
   color: var(--ink3);
   font-size: 14px;
+  pointer-events: none;
 }
+
+/* Filters */
 .filter-group { display: flex; flex-direction: column; gap: 4px; }
 .filter-btn {
   display: flex;
@@ -200,11 +181,12 @@ body.mobile-view .list-row {
   cursor: pointer;
   font-size: 13px;
   color: var(--ink2);
+  transition: background 0.12s;
+  border: none;
   background: transparent;
   font-family: var(--font-body);
   width: 100%;
   text-align: left;
-  border: none;
 }
 .filter-btn:hover { background: var(--cream3); }
 .filter-btn.active { background: var(--ink); color: var(--cream); }
@@ -213,9 +195,14 @@ body.mobile-view .list-row {
   background: rgba(0,0,0,0.08);
   border-radius: 10px;
   padding: 1px 7px;
+  font-family: var(--font-head);
 }
 .filter-btn.active .count { background: rgba(255,255,255,0.15); }
-.rarity-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+/* Rarity dots */
+.rarity-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; flex-shrink: 0; }
+
+/* Sort select */
 .sort-select {
   width: 100%;
   background: white;
@@ -224,12 +211,17 @@ body.mobile-view .list-row {
   padding: 8px 10px;
   font-family: var(--font-body);
   font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6159' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 30px;
 }
+
+/* View toggle */
 .view-toggle {
   display: flex;
   background: var(--cream3);
@@ -246,8 +238,11 @@ body.mobile-view .list-row {
   cursor: pointer;
   font-size: 14px;
   color: var(--ink3);
+  transition: all 0.15s;
 }
 .view-btn.active { background: white; color: var(--ink); box-shadow: var(--shadow); }
+
+/* Stats mini */
 .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .mini-stat {
   background: white;
@@ -255,24 +250,33 @@ body.mobile-view .list-row {
   border-radius: 8px;
   padding: 10px;
 }
-.mini-stat-val { font-family: var(--font-head); font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.mini-stat-val {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
 .mini-stat-label { font-size: 10px; color: var(--ink3); }
 
+/* ── Main area ── */
 .main {
   padding: 24px;
   overflow-y: auto;
 }
+
+/* Toolbar */
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 .toolbar-left { display: flex; align-items: center; gap: 10px; }
 .result-count { font-size: 13px; color: var(--ink3); }
-.result-count strong { color: var(--ink); font-family: var(--font-head); }
+.result-count strong { color: var(--ink); font-family: var(--font-head); font-size: 12px; }
+
+/* Add card button */
 .btn-add {
   display: flex;
   align-items: center;
@@ -286,15 +290,20 @@ body.mobile-view .list-row {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  transition: opacity 0.15s;
+  letter-spacing: 0.3px;
 }
+.btn-add:hover { opacity: 0.85; }
+.btn-add-icon { font-size: 16px; line-height: 1; }
 
-/* Card grid / list (same as original) */
+/* ── Grid view ── */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 14px;
 }
 .card-grid.hidden { display: none; }
+
 .poke-card {
   background: white;
   border: 1px solid var(--border);
@@ -302,8 +311,15 @@ body.mobile-view .list-row {
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.18s, box-shadow 0.18s;
+  position: relative;
+  animation: fadeIn 0.3s ease both;
 }
-.poke-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.poke-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
 .card-art {
   height: 110px;
   display: flex;
@@ -313,17 +329,39 @@ body.mobile-view .list-row {
   position: relative;
   overflow: hidden;
 }
+.card-art-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+}
 .card-art-emoji { position: relative; z-index: 1; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2)); }
+
 .card-info { padding: 10px 11px 11px; }
-.card-name { font-family: var(--font-head); font-size: 11px; font-weight: 700; }
+.card-name-row { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.card-name { font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--ink); line-height: 1.3; }
 .card-set { font-size: 11px; color: var(--ink3); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card-footer { display: flex; align-items: center; justify-content: space-between; }
-.card-condition { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+.card-condition {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
 .card-qty { font-size: 11px; color: var(--ink3); }
-.rarity-badge { font-size: 9px; padding: 1px 5px; border-radius: 3px; font-family: var(--font-head); letter-spacing: 0.5px; }
 
+/* Rarity badge */
+.rarity-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: var(--font-head);
+  letter-spacing: 0.5px;
+}
+
+/* ── List view ── */
 .card-list { display: none; flex-direction: column; gap: 6px; }
 .card-list.visible { display: flex; }
+
 .list-row {
   background: white;
   border: 1px solid var(--border);
@@ -334,7 +372,18 @@ body.mobile-view .list-row {
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  transition: border-color 0.12s, box-shadow 0.12s;
+  animation: fadeIn 0.3s ease both;
 }
+.list-row:hover { border-color: var(--border2); box-shadow: var(--shadow); }
+.list-emoji { font-size: 22px; text-align: center; }
+.list-name { font-family: var(--font-head); font-size: 12px; font-weight: 700; }
+.list-set { font-size: 12px; color: var(--ink3); }
+.list-number { font-size: 12px; color: var(--ink3); font-family: monospace; }
+.list-condition { font-size: 11px; }
+.list-qty { font-size: 13px; font-weight: 600; font-family: var(--font-head); text-align: center; }
+
+/* List header */
 .list-header {
   display: grid;
   grid-template-columns: 36px 2fr 1.5fr 1fr 80px 80px 36px;
@@ -346,9 +395,17 @@ body.mobile-view .list-row {
   text-transform: uppercase;
   font-family: var(--font-head);
 }
-.empty { text-align: center; padding: 60px 20px; color: var(--ink3); }
 
-/* Modals */
+/* ── Empty state ── */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink3);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty h3 { font-family: var(--font-head); font-size: 14px; color: var(--ink2); margin-bottom: 6px; }
+
+/* ── Modal ── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -379,8 +436,8 @@ body.mobile-view .list-row {
   padding: 20px 24px 16px;
   border-bottom: 1px solid var(--border);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 .modal-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; }
 .modal-close {
@@ -390,14 +447,21 @@ body.mobile-view .list-row {
   background: transparent;
   cursor: pointer;
   font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink3);
+  transition: background 0.12s;
 }
+.modal-close:hover { background: var(--cream3); }
 .modal-body { padding: 20px 24px 24px; }
+
+/* Form */
 .form-row { margin-bottom: 14px; }
 .form-label {
   display: block;
   font-size: 11px;
   font-family: var(--font-head);
   letter-spacing: 0.5px;
+  color: var(--ink2);
   margin-bottom: 6px;
   text-transform: uppercase;
 }
@@ -409,8 +473,14 @@ body.mobile-view .list-row {
   padding: 9px 12px;
   font-family: var(--font-body);
   font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
 }
+.form-input:focus, .form-select:focus { border-color: var(--ink); }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
 .btn-submit {
   width: 100%;
   background: var(--ink);
@@ -419,10 +489,38 @@ body.mobile-view .list-row {
   border-radius: 8px;
   padding: 11px;
   font-family: var(--font-head);
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+  transition: opacity 0.15s;
+  letter-spacing: 0.5px;
   margin-top: 4px;
 }
+.btn-submit:hover { opacity: 0.85; }
+
+/* Card detail modal */
+.detail-art {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.detail-field {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.detail-field-label { font-size: 10px; color: var(--ink3); font-family: var(--font-head); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+.detail-field-val { font-size: 14px; font-weight: 500; }
+
+/* Delete btn */
 .btn-delete {
   width: 100%;
   background: transparent;
@@ -431,18 +529,22 @@ body.mobile-view .list-row {
   border-radius: 8px;
   padding: 9px;
   font-family: var(--font-head);
+  font-size: 11px;
   cursor: pointer;
+  transition: all 0.15s;
   margin-top: 8px;
 }
 .btn-delete:hover { background: var(--red); color: white; }
 
-/* Condition / rarity classes (same as original) */
+/* Condition colors */
 .cond-mint { background: rgba(58,140,92,0.12); color: var(--green); }
 .cond-nm { background: rgba(58,110,168,0.12); color: var(--blue); }
 .cond-lp { background: rgba(232,184,75,0.15); color: #a07a10; }
 .cond-mp { background: rgba(217,79,61,0.12); color: var(--red); }
 .cond-hp { background: rgba(124,92,191,0.12); color: var(--purple); }
 .cond-damaged { background: rgba(107,97,89,0.12); color: var(--ink3); }
+
+/* Rarity colors */
 .rar-common { background: rgba(107,97,89,0.1); color: var(--ink3); }
 .rar-uncommon { background: rgba(58,140,92,0.1); color: var(--green); }
 .rar-rare { background: rgba(58,110,168,0.1); color: var(--blue); }
@@ -450,69 +552,64 @@ body.mobile-view .list-row {
 .rar-ultra { background: rgba(217,79,61,0.12); color: var(--red); }
 .rar-secret { background: rgba(124,92,191,0.12); color: var(--purple); }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Agent chat */
-.agent-chat {
-  margin-top: 32px;
-  background: white;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  padding: 16px;
+/* ========== MOBILE RESPONSIVENESS ========== */
+body.mobile-view .app {
+  display: block;
 }
-.agent-chat h3 {
-  font-family: var(--font-head);
-  font-size: 14px;
-  margin-bottom: 12px;
+body.mobile-view .sidebar {
+  width: 100%;
+  border-right: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
 }
-.chat-input-area {
-  display: flex;
+body.mobile-view .main {
+  padding: 20px;
+}
+body.mobile-view .card-grid {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+body.mobile-view .list-row {
+  grid-template-columns: 30px 2fr 1.5fr 80px 70px 30px;
   gap: 8px;
-  margin-bottom: 12px;
+  font-size: 12px;
 }
-.chat-input-area input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid var(--border2);
-  border-radius: 24px;
-  font-family: var(--font-body);
+body.mobile-view .list-header {
+  grid-template-columns: 30px 2fr 1.5fr 80px 70px 30px;
+  gap: 8px;
 }
-.chat-input-area button {
-  background: var(--ink);
-  color: white;
-  border: none;
-  border-radius: 24px;
-  padding: 0 16px;
-  cursor: pointer;
-}
-.agent-response {
-  background: var(--cream2);
-  padding: 12px;
-  border-radius: 12px;
-  font-size: 13px;
-  white-space: pre-wrap;
+@media (max-width: 768px) {
+  /* Default (without toggle) also some basic responsiveness */
+  .header {
+    padding: 0 16px;
+  }
+  .header-right .header-stat {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
 }
 </style>
 </head>
 <body>
 
+<!-- Header -->
 <header class="header">
-  <div class="logo" onclick="location.reload()">
+  <div class="logo">
     <div class="logo-dot">◆</div>
     Poké<span>Agent</span>
-  </div>
-  <div style="display: flex; gap: 10px;">
-    <button class="mobile-toggle" id="mobileToggleBtn">📱 Mobile view</button>
-    <button class="mobile-toggle" id="logoutBtn" style="display: none;">🚪 Logout</button>
+    <span style="font-family:var(--font-body);font-weight:300;font-size:12px;color:rgba(245,240,232,0.4);margin-left:4px;">Collection Tracker</span>
   </div>
   <div class="header-right">
     <div class="header-stat"><strong id="hTotal">0</strong> cards</div>
     <div class="header-stat"><strong id="hSets">0</strong> sets</div>
+    <button class="mobile-toggle" id="mobileToggleBtn">📱 Mobile view</button>
   </div>
 </header>
 
 <div class="app">
+
+  <!-- Sidebar -->
   <aside class="sidebar">
+    <!-- Search -->
     <div class="sidebar-block">
       <div class="sidebar-label">Search</div>
       <div class="search-wrap">
@@ -520,6 +617,8 @@ body.mobile-view .list-row {
         <input class="search-input" type="text" id="searchInput" placeholder="Card name…" oninput="applyFilters()"/>
       </div>
     </div>
+
+    <!-- Stats -->
     <div class="sidebar-block">
       <div class="sidebar-label">Collection Stats</div>
       <div class="mini-stats">
@@ -529,216 +628,244 @@ body.mobile-view .list-row {
         <div class="mini-stat"><div class="mini-stat-val" id="statHolo">0</div><div class="mini-stat-label">Holos</div></div>
       </div>
     </div>
-    <div class="sidebar-block"><div class="sidebar-label">Filter by Set</div><div class="filter-group" id="setFilters"></div></div>
-    <div class="sidebar-block"><div class="sidebar-label">Filter by Rarity</div><div class="filter-group" id="rarityFilters"></div></div>
-    <div class="sidebar-block"><div class="sidebar-label">Sort By</div><select class="sort-select" id="sortSelect" onchange="applyFilters()"><option value="name">Name A–Z</option><option value="name-desc">Name Z–A</option><option value="set">Set</option><option value="rarity">Rarity</option><option value="condition">Condition</option><option value="qty-desc">Quantity ↓</option><option value="newest">Recently added</option></select></div>
-    <div class="sidebar-block"><div class="sidebar-label">View</div><div class="view-toggle"><button class="view-btn active" id="btnGrid" onclick="setView('grid')">⊞ Grid</button><button class="view-btn" id="btnList" onclick="setView('list')">☰ List</button></div></div>
-  </aside>
 
-  <main class="main">
-    <div class="toolbar">
-      <div class="toolbar-left"><div class="result-count"><strong id="resultCount">0</strong> cards shown</div></div>
-      <button class="btn-add" onclick="openAddModal()"><span class="btn-add-icon">+</span> Add Card</button>
+    <!-- Filter by set -->
+    <div class="sidebar-block">
+      <div class="sidebar-label">Filter by Set</div>
+      <div class="filter-group" id="setFilters"></div>
     </div>
 
-    <div class="card-grid" id="cardGrid"></div>
-    <div id="listHeader" class="list-header" style="display:none;"><span></span><span>Name</span><span>Set</span><span>Number</span><span>Condition</span><span>Qty</span><span></span></div>
-    <div class="card-list" id="cardList"></div>
-    <div class="empty" id="emptyState" style="display:none;"><div class="empty-icon">📭</div><h3>No cards found</h3><p>Try adjusting your filters or add a new card.</p></div>
+    <!-- Filter by rarity -->
+    <div class="sidebar-block">
+      <div class="sidebar-label">Filter by Rarity</div>
+      <div class="filter-group" id="rarityFilters"></div>
+    </div>
 
-    <!-- AI Agent Chat -->
-    <div class="agent-chat">
-      <h3>🤖 PokéAgent Assistant</h3>
-      <div class="chat-input-area">
-        <input type="text" id="agentQuestion" placeholder="Ask about your collection, market prices, or trading advice...">
-        <button onclick="askAgent()">Ask</button>
+    <!-- Sort -->
+    <div class="sidebar-block">
+      <div class="sidebar-label">Sort By</div>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="name">Name A–Z</option>
+        <option value="name-desc">Name Z–A</option>
+        <option value="set">Set</option>
+        <option value="rarity">Rarity</option>
+        <option value="condition">Condition</option>
+        <option value="qty-desc">Quantity ↓</option>
+        <option value="newest">Recently added</option>
+      </select>
+    </div>
+
+    <!-- View toggle -->
+    <div class="sidebar-block" style="border-bottom:none;margin-bottom:0;">
+      <div class="sidebar-label">View</div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btnGrid" onclick="setView('grid')">⊞ Grid</button>
+        <button class="view-btn" id="btnList" onclick="setView('list')">☰ List</button>
       </div>
-      <div id="agentResponse" class="agent-response">✨ Ready to help! Ask me anything about your Pokémon cards.</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="result-count"><strong id="resultCount">0</strong> cards shown</div>
+      </div>
+      <button class="btn-add" onclick="openAddModal()">
+        <span class="btn-add-icon">+</span> Add Card
+      </button>
+    </div>
+
+    <!-- Grid -->
+    <div class="card-grid" id="cardGrid"></div>
+
+    <!-- List header + list -->
+    <div id="listHeader" class="list-header" style="display:none;">
+      <span></span>
+      <span>Name</span>
+      <span>Set</span>
+      <span>Number</span>
+      <span>Condition</span>
+      <span>Qty</span>
+      <span></span>
+    </div>
+    <div class="card-list" id="cardList"></div>
+
+    <!-- Empty -->
+    <div class="empty" id="emptyState" style="display:none;">
+      <div class="empty-icon">📭</div>
+      <h3>No cards found</h3>
+      <p>Try adjusting your filters or add a new card.</p>
     </div>
   </main>
 </div>
 
-<!-- Login Modal -->
-<div class="modal-overlay" id="loginModal">
-  <div class="modal">
-    <div class="modal-header"><div class="modal-title">Login / Signup</div><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="loginEmail" type="email" placeholder="you@example.com"/></div>
-      <div class="form-row"><label class="form-label">Password</label><input class="form-input" id="loginPassword" type="password"/></div>
-      <div style="display: flex; gap: 12px; margin-top: 12px;">
-        <button class="btn-submit" onclick="authLogin()">Login</button>
-        <button class="btn-submit" style="background: var(--ink3);" onclick="authSignup()">Signup</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Add Card Modal (same as before) -->
+<!-- Add Card Modal -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Add Card to Collection</div><button class="modal-close" onclick="closeModal('addModal')">✕</button></div>
+    <div class="modal-header">
+      <div class="modal-title">Add Card to Collection</div>
+      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+    </div>
     <div class="modal-body">
-      <div class="form-row"><label class="form-label">Card Name *</label><input class="form-input" id="f-name" placeholder="e.g. Charizard"/></div>
-      <div class="form-grid"><div class="form-row"><label class="form-label">Set *</label><input class="form-input" id="f-set" placeholder="Base Set"/></div><div class="form-row"><label class="form-label">Card Number</label><input class="form-input" id="f-number" placeholder="4/102"/></div></div>
-      <div class="form-grid"><div class="form-row"><label class="form-label">Rarity</label><select class="form-select" id="f-rarity"><option value="Common">Common</option><option value="Uncommon">Uncommon</option><option value="Rare">Rare</option><option value="Holo Rare" selected>Holo Rare</option><option value="Ultra Rare">Ultra Rare</option><option value="Secret Rare">Secret Rare</option></select></div><div class="form-row"><label class="form-label">Condition</label><select class="form-select" id="f-condition"><option value="Mint">Mint</option><option value="Near Mint" selected>Near Mint</option><option value="Lightly Played">Lightly Played</option><option value="Moderately Played">Moderately Played</option><option value="Heavily Played">Heavily Played</option><option value="Damaged">Damaged</option></select></div></div>
-      <div class="form-grid"><div class="form-row"><label class="form-label">Quantity</label><input class="form-input" id="f-qty" type="number" min="1" value="1"/></div><div class="form-row"><label class="form-label">Language</label><select class="form-select" id="f-lang"><option value="English">English</option><option value="Japanese">Japanese</option><option value="German">German</option><option value="French">French</option><option value="Spanish">Spanish</option></select></div></div>
-      <div class="form-row"><label class="form-label">Notes</label><input class="form-input" id="f-notes" placeholder="PSA 9, signed ..."/></div>
+      <div class="form-row">
+        <label class="form-label">Card Name *</label>
+        <input class="form-input" id="f-name" placeholder="e.g. Charizard" autocomplete="off"/>
+      </div>
+      <div class="form-grid">
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-label">Set *</label>
+          <input class="form-input" id="f-set" placeholder="e.g. Base Set"/>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-label">Card Number</label>
+          <input class="form-input" id="f-number" placeholder="e.g. 4/102"/>
+        </div>
+      </div>
+      <div style="height:14px;"></div>
+      <div class="form-grid">
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-label">Rarity *</label>
+          <select class="form-select" id="f-rarity">
+            <option value="Common">Common</option>
+            <option value="Uncommon">Uncommon</option>
+            <option value="Rare">Rare</option>
+            <option value="Holo Rare" selected>Holo Rare</option>
+            <option value="Ultra Rare">Ultra Rare</option>
+            <option value="Secret Rare">Secret Rare</option>
+          </select>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-label">Condition *</label>
+          <select class="form-select" id="f-condition">
+            <option value="Mint">Mint</option>
+            <option value="Near Mint" selected>Near Mint</option>
+            <option value="Lightly Played">Lightly Played</option>
+            <option value="Moderately Played">Moderately Played</option>
+            <option value="Heavily Played">Heavily Played</option>
+            <option value="Damaged">Damaged</option>
+          </select>
+        </div>
+      </div>
+      <div style="height:14px;"></div>
+      <div class="form-grid">
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-label">Quantity</label>
+          <input class="form-input" id="f-qty" type="number" min="1" value="1"/>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-label">Language</label>
+          <select class="form-select" id="f-lang">
+            <option value="English">English</option>
+            <option value="Japanese">Japanese</option>
+            <option value="German">German</option>
+            <option value="French">French</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Italian">Italian</option>
+            <option value="Portuguese">Portuguese</option>
+            <option value="Korean">Korean</option>
+          </select>
+        </div>
+      </div>
+      <div style="height:14px;"></div>
+      <div class="form-row">
+        <label class="form-label">Notes (optional)</label>
+        <input class="form-input" id="f-notes" placeholder="e.g. PSA 9, bought at London TCG Fest…"/>
+      </div>
       <button class="btn-submit" onclick="addCard()">Add to Collection</button>
     </div>
   </div>
 </div>
 
-<!-- Detail Modal -->
+<!-- Card Detail Modal -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="d-title">Card Details</div><button class="modal-close" onclick="closeModal('detailModal')">✕</button></div>
-    <div class="modal-body"><div class="detail-art" id="d-art"></div><div class="detail-grid" id="d-grid"></div><button class="btn-delete" id="d-delete">Remove from collection</button></div>
+    <div class="modal-header">
+      <div class="modal-title" id="d-title">Card Details</div>
+      <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-art" id="d-art"></div>
+      <div class="detail-grid" id="d-grid"></div>
+      <button class="btn-delete" id="d-delete">Remove from collection</button>
+    </div>
   </div>
 </div>
 
 <script>
-// ---------- API & AUTH ----------
-const API_BASE = 'http://localhost:5000/api';
-let authToken = localStorage.getItem('token');
-let currentUserId = null;
-let collection = [];           // will hold cards from backend
+// ── Starter data (same as original) ───────────────────────────────────────────────────────
+const EMOJIS = {
+  Charizard:'🔥',Blastoise:'💧',Venusaur:'🌿',Pikachu:'⚡',Mewtwo:'🔮',
+  Mew:'✨',Gengar:'👻',Dragonite:'🐉',Snorlax:'💤',Eevee:'🦊',
+  Umbreon:'🌙',Espeon:'🌟',Lugia:'🕊️',Ho_Oh:'🌈',Raichu:'⚡',
+  Alakazam:'🧙',Machamp:'💪',Gyarados:'🌊',Lapras:'🧊',Vaporeon:'💙',
+};
+
+function getEmoji(name) {
+  const key = name.replace(/[^a-zA-Z]/g,'');
+  for(const k in EMOJIS) if(key.toLowerCase().includes(k.toLowerCase())) return EMOJIS[k];
+  return '🃏';
+}
+
+const TYPE_COLORS = {
+  'Base Set':'#e8b84b','Base Set 2':'#d4a832','Jungle':'#3a8c5c','Fossil':'#7c6b5a',
+  'Team Rocket':'#1a1612','Neo Genesis':'#5b8cc4','Neo Discovery':'#7c5cbf',
+  'Neo Revelation':'#d94f3d','Neo Destiny':'#4a3a2e','Expedition':'#c44a8c',
+  'Sword & Shield':'#e8b84b','Scarlet & Violet':'#d94f3d','Sun & Moon':'#f5a742',
+  'XY':'#3a6ea8','Black & White':'#333','HeartGold SoulSilver':'#c8aa3a',
+};
+
+function getSetColor(set) {
+  for(const k in TYPE_COLORS) if(set.includes(k)) return TYPE_COLORS[k];
+  return '#6b6159';
+}
+
+const COND_MAP = {
+  'Mint':'cond-mint','Near Mint':'cond-nm','Lightly Played':'cond-lp',
+  'Moderately Played':'cond-mp','Heavily Played':'cond-hp','Damaged':'cond-damaged'
+};
+const COND_SHORT = {
+  'Mint':'M','Near Mint':'NM','Lightly Played':'LP',
+  'Moderately Played':'MP','Heavily Played':'HP','Damaged':'DM'
+};
+const RAR_MAP = {
+  'Common':'rar-common','Uncommon':'rar-uncommon','Rare':'rar-rare',
+  'Holo Rare':'rar-holo','Ultra Rare':'rar-ultra','Secret Rare':'rar-secret'
+};
+const RAR_SHORT = {
+  'Common':'◆','Uncommon':'◆◆','Rare':'★','Holo Rare':'★H','Ultra Rare':'★★','Secret Rare':'✦'
+};
+
+// ── State ──────────────────────────────────────────────────────────────
+let collection = JSON.parse(localStorage.getItem('pokeagent-collection') || '[]');
 let activeSet = 'all';
 let activeRarity = 'all';
 let currentView = 'grid';
-let detailCardId = null;
+let detailIdx = null;
 
-// Helper fetch with auth
-async function apiFetch(endpoint, options = {}) {
-  const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers
-  };
-  if (authToken) {
-    headers['Authorization'] = `Bearer ${authToken}`;
-  }
-  const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
-  if (res.status === 401) {
-    // token expired or invalid
-    logout();
-    throw new Error('Session expired, please login again');
-  }
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'API error');
-  return data;
+// Seed with demo cards if empty
+if(collection.length === 0) {
+  collection = [
+    {id:1,name:'Charizard',set:'Base Set',number:'4/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'Shadowless print',added:Date.now()-86400000*10},
+    {id:2,name:'Blastoise',set:'Base Set',number:'2/102',rarity:'Holo Rare',condition:'Lightly Played',qty:1,lang:'English',notes:'',added:Date.now()-86400000*8},
+    {id:3,name:'Venusaur',set:'Base Set',number:'15/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'',added:Date.now()-86400000*7},
+    {id:4,name:'Pikachu',set:'Jungle',number:'60/64',rarity:'Common',condition:'Mint',qty:3,lang:'English',notes:'',added:Date.now()-86400000*6},
+    {id:5,name:'Mewtwo',set:'Base Set',number:'10/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'Japanese',notes:'Japanese 1st edition',added:Date.now()-86400000*5},
+    {id:6,name:'Lugia',set:'Neo Genesis',number:'9/111',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'',added:Date.now()-86400000*4},
+    {id:7,name:'Gengar',set:'Fossil',number:'5/62',rarity:'Holo Rare',condition:'Moderately Played',qty:1,lang:'English',notes:'',added:Date.now()-86400000*3},
+    {id:8,name:'Dragonite',set:'Fossil',number:'4/62',rarity:'Holo Rare',condition:'Lightly Played',qty:1,lang:'English',notes:'',added:Date.now()-86400000*2},
+    {id:9,name:'Eevee',set:'Jungle',number:'51/64',rarity:'Common',condition:'Near Mint',qty:4,lang:'English',notes:'',added:Date.now()-86400000},
+    {id:10,name:'Snorlax',set:'Jungle',number:'11/64',rarity:'Rare',condition:'Near Mint',qty:1,lang:'English',notes:'',added:Date.now()-3600000},
+    {id:11,name:'Alakazam',set:'Base Set',number:'1/102',rarity:'Holo Rare',condition:'Near Mint',qty:1,lang:'English',notes:'',added:Date.now()-1800000},
+    {id:12,name:'Gyarados',set:'Base Set',number:'6/102',rarity:'Holo Rare',condition:'Heavily Played',qty:1,lang:'English',notes:'',added:Date.now()-900000},
+  ];
+  save();
 }
 
-function logout() {
-  localStorage.removeItem('token');
-  authToken = null;
-  currentUserId = null;
-  document.getElementById('logoutBtn').style.display = 'none';
-  document.getElementById('loginModal').classList.add('open');
-  collection = [];
-  renderCollection();
-}
+function save() { localStorage.setItem('pokeagent-collection', JSON.stringify(collection)); }
+function nextId() { return collection.length ? Math.max(...collection.map(c=>c.id))+1 : 1; }
 
-async function authLogin() {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  try {
-    const data = await apiFetch('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
-    });
-    authToken = data.token;
-    localStorage.setItem('token', authToken);
-    currentUserId = data.user.id;
-    closeModal('loginModal');
-    document.getElementById('logoutBtn').style.display = 'block';
-    await loadCollection();
-  } catch (err) {
-    alert('Login failed: ' + err.message);
-  }
-}
-
-async function authSignup() {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  try {
-    const data = await apiFetch('/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify({ email, password, name: email.split('@')[0] })
-    });
-    authToken = data.token;
-    localStorage.setItem('token', authToken);
-    currentUserId = data.user.id;
-    closeModal('loginModal');
-    document.getElementById('logoutBtn').style.display = 'block';
-    await loadCollection();
-  } catch (err) {
-    alert('Signup failed: ' + err.message);
-  }
-}
-
-// ---------- COLLECTION API ----------
-async function loadCollection() {
-  try {
-    collection = await apiFetch('/collection');
-    renderCollection();
-  } catch (err) {
-    console.error(err);
-    if (err.message.includes('Session expired')) logout();
-  }
-}
-
-async function addCard() {
-  const name = document.getElementById('f-name').value.trim();
-  const set = document.getElementById('f-set').value.trim();
-  if (!name || !set) { alert('Name and set required'); return; }
-  const card = {
-    name,
-    set,
-    number: document.getElementById('f-number').value.trim(),
-    rarity: document.getElementById('f-rarity').value,
-    condition: document.getElementById('f-condition').value,
-    quantity: parseInt(document.getElementById('f-qty').value) || 1,
-    language: document.getElementById('f-lang').value,
-    notes: document.getElementById('f-notes').value.trim()
-  };
-  try {
-    const newCard = await apiFetch('/collection', {
-      method: 'POST',
-      body: JSON.stringify(card)
-    });
-    collection.push(newCard);
-    closeModal('addModal');
-    document.getElementById('f-name').value = '';
-    document.getElementById('f-set').value = '';
-    document.getElementById('f-number').value = '';
-    document.getElementById('f-notes').value = '';
-    renderCollection();
-  } catch (err) {
-    alert('Failed to add card: ' + err.message);
-  }
-}
-
-async function deleteCard(id) {
-  if (!confirm('Remove this card from your collection?')) return;
-  try {
-    await apiFetch(`/collection/${id}`, { method: 'DELETE' });
-    collection = collection.filter(c => c.id !== id);
-    closeModal('detailModal');
-    renderCollection();
-  } catch (err) {
-    alert('Delete failed: ' + err.message);
-  }
-}
-
-// ---------- RENDERING (similar to original, but uses collection array) ----------
-const EMOJIS = { Charizard:'🔥',Blastoise:'💧',Venusaur:'🌿',Pikachu:'⚡',Mewtwo:'🔮',Mew:'✨',Gengar:'👻',Dragonite:'🐉',Snorlax:'💤',Eevee:'🦊',Umbreon:'🌙',Espeon:'🌟',Lugia:'🕊️',Ho_Oh:'🌈',Raichu:'⚡',Alakazam:'🧙',Machamp:'💪',Gyarados:'🌊',Lapras:'🧊',Vaporeon:'💙'};
-function getEmoji(name) { const key=name.replace(/[^a-zA-Z]/g,''); for(let k in EMOJIS) if(key.toLowerCase().includes(k.toLowerCase())) return EMOJIS[k]; return '🃏'; }
-const TYPE_COLORS = {'Base Set':'#e8b84b','Base Set 2':'#d4a832','Jungle':'#3a8c5c','Fossil':'#7c6b5a','Team Rocket':'#1a1612','Neo Genesis':'#5b8cc4','Neo Discovery':'#7c5cbf','Neo Revelation':'#d94f3d','Sword & Shield':'#e8b84b','Scarlet & Violet':'#d94f3d'};
-function getSetColor(set) { for(let k in TYPE_COLORS) if(set.includes(k)) return TYPE_COLORS[k]; return '#6b6159'; }
-const COND_MAP = {'Mint':'cond-mint','Near Mint':'cond-nm','Lightly Played':'cond-lp','Moderately Played':'cond-mp','Heavily Played':'cond-hp','Damaged':'cond-damaged'};
-const COND_SHORT = {'Mint':'M','Near Mint':'NM','Lightly Played':'LP','Moderately Played':'MP','Heavily Played':'HP','Damaged':'DM'};
-const RAR_MAP = {'Common':'rar-common','Uncommon':'rar-uncommon','Rare':'rar-rare','Holo Rare':'rar-holo','Ultra Rare':'rar-ultra','Secret Rare':'rar-secret'};
-const RAR_SHORT = {'Common':'◆','Uncommon':'◆◆','Rare':'★','Holo Rare':'★H','Ultra Rare':'★★','Secret Rare':'✦'};
-
+// ── Render ─────────────────────────────────────────────────────────────
 function getFiltered() {
   let q = document.getElementById('searchInput').value.toLowerCase().trim();
   let results = collection.filter(c => {
@@ -751,14 +878,25 @@ function getFiltered() {
   results.sort((a,b) => {
     if(sort==='name') return a.name.localeCompare(b.name);
     if(sort==='name-desc') return b.name.localeCompare(a.name);
-    if(sort==='set') return a.set.localeCompare(b.set);
+    if(sort==='set') return a.set.localeCompare(b.set) || a.name.localeCompare(b.name);
     if(sort==='rarity') return a.rarity.localeCompare(b.rarity);
     if(sort==='condition') return a.condition.localeCompare(b.condition);
-    if(sort==='qty-desc') return b.quantity - a.quantity;
-    if(sort==='newest') return new Date(b.addedAt) - new Date(a.addedAt);
+    if(sort==='qty-desc') return b.qty - a.qty;
+    if(sort==='newest') return b.added - a.added;
     return 0;
   });
   return results;
+}
+
+function applyFilters() {
+  buildSetFilters();
+  buildRarityFilters();
+  const results = getFiltered();
+  renderGrid(results);
+  renderList(results);
+  updateStats();
+  document.getElementById('resultCount').textContent = results.length;
+  document.getElementById('emptyState').style.display = results.length === 0 ? 'block' : 'none';
 }
 
 function renderGrid(results) {
@@ -771,14 +909,16 @@ function renderGrid(results) {
     div.className = 'poke-card';
     div.style.animationDelay = (i*0.04) + 's';
     div.innerHTML = `
-      <div class="card-art" style="background:${color}18;"><div class="card-art-emoji">${emoji}</div></div>
+      <div class="card-art" style="background:${color}18;">
+        <div class="card-art-emoji">${emoji}</div>
+      </div>
       <div class="card-info">
         <div class="card-name">${c.name}</div>
         <div class="card-set">${c.set}${c.number?' · '+c.number:''}</div>
         <div class="card-footer">
           <span class="card-condition ${COND_MAP[c.condition]}">${COND_SHORT[c.condition]}</span>
           <span class="rarity-badge ${RAR_MAP[c.rarity]}">${RAR_SHORT[c.rarity]}</span>
-          ${c.quantity > 1 ? `<span class="card-qty">×${c.quantity}</span>` : ''}
+          ${c.qty > 1 ? `<span class="card-qty">×${c.qty}</span>` : ''}
         </div>
       </div>
     `;
@@ -801,7 +941,7 @@ function renderList(results) {
       <div class="list-set">${c.set}</div>
       <div class="list-number">${c.number||'—'}</div>
       <div><span class="card-condition ${COND_MAP[c.condition]}" style="font-size:11px;">${c.condition}</span></div>
-      <div class="list-qty">${c.quantity}</div>
+      <div class="list-qty">${c.qty}</div>
       <div><span class="rarity-badge ${RAR_MAP[c.rarity]}">${RAR_SHORT[c.rarity]}</span></div>
     `;
     div.onclick = () => openDetail(c.id);
@@ -811,12 +951,15 @@ function renderList(results) {
 
 function buildSetFilters() {
   const sets = {};
-  collection.forEach(c => { sets[c.set] = (sets[c.set]||0) + c.quantity; });
+  collection.forEach(c => { sets[c.set] = (sets[c.set]||0) + c.qty; });
   const el = document.getElementById('setFilters');
-  el.innerHTML = `<button class="filter-btn ${activeSet==='all'?'active':''}" onclick="filterSet('all')">All sets <span class="count">${collection.reduce((s,c)=>s+c.quantity,0)}</span></button>`;
+  el.innerHTML = `<button class="filter-btn ${activeSet==='all'?'active':''}" onclick="filterSet('all')">All sets <span class="count">${collection.reduce((s,c)=>s+c.qty,0)}</span></button>`;
   Object.entries(sets).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([set,cnt])=>{
     const col = getSetColor(set);
-    el.innerHTML += `<button class="filter-btn ${activeSet===set?'active':''}" onclick="filterSet('${set.replace(/'/g,"\\'")}')"><span style="display:flex;gap:6px;"><span class="rarity-dot" style="background:${col};"></span>${set}</span><span class="count">${cnt}</span></button>`;
+    el.innerHTML += `<button class="filter-btn ${activeSet===set?'active':''}" onclick="filterSet('${set.replace(/'/g,"\\'")}')">
+      <span style="display:flex;align-items:center;gap:6px;"><span class="rarity-dot" style="background:${col};"></span>${set}</span>
+      <span class="count">${cnt}</span>
+    </button>`;
   });
 }
 
@@ -827,7 +970,9 @@ function buildRarityFilters() {
   const el = document.getElementById('rarityFilters');
   el.innerHTML = `<button class="filter-btn ${activeRarity==='all'?'active':''}" onclick="filterRarity('all')">All rarities <span class="count">${collection.length}</span></button>`;
   ORDER.filter(r=>rars[r]).forEach(r=>{
-    el.innerHTML += `<button class="filter-btn ${activeRarity===r?'active':''}" onclick="filterRarity('${r}')"><span>${RAR_SHORT[r]} ${r}</span><span class="count">${rars[r]}</span></button>`;
+    el.innerHTML += `<button class="filter-btn ${activeRarity===r?'active':''}" onclick="filterRarity('${r}')">
+      <span>${RAR_SHORT[r]} ${r}</span><span class="count">${rars[r]}</span>
+    </button>`;
   });
 }
 
@@ -835,7 +980,7 @@ function filterSet(s) { activeSet = s; applyFilters(); }
 function filterRarity(r) { activeRarity = r; applyFilters(); }
 
 function updateStats() {
-  const total = collection.reduce((s,c)=>s+c.quantity,0);
+  const total = collection.reduce((s,c)=>s+c.qty,0);
   const unique = collection.length;
   const sets = new Set(collection.map(c=>c.set)).size;
   const holos = collection.filter(c=>c.rarity.includes('Holo')||c.rarity.includes('Ultra')||c.rarity.includes('Secret')).length;
@@ -847,22 +992,14 @@ function updateStats() {
   document.getElementById('hSets').textContent = sets;
 }
 
-function applyFilters() {
-  buildSetFilters();
-  buildRarityFilters();
-  const results = getFiltered();
-  renderGrid(results);
-  renderList(results);
-  updateStats();
-  document.getElementById('resultCount').textContent = results.length;
-  document.getElementById('emptyState').style.display = results.length === 0 ? 'block' : 'none';
-}
-
+// ── View toggle ────────────────────────────────────────────────────────
 function setView(v) {
   currentView = v;
   const grid = document.getElementById('cardGrid');
   const list = document.getElementById('cardList');
   const listHeader = document.getElementById('listHeader');
+  document.getElementById('btnGrid').classList.toggle('active', v==='grid');
+  document.getElementById('btnList').classList.toggle('active', v==='list');
   if(v==='grid'){
     grid.classList.remove('hidden'); list.classList.remove('visible');
     listHeader.style.display='none';
@@ -870,77 +1007,87 @@ function setView(v) {
     grid.classList.add('hidden'); list.classList.add('visible');
     listHeader.style.display='grid';
   }
-  document.getElementById('btnGrid').classList.toggle('active', v==='grid');
-  document.getElementById('btnList').classList.toggle('active', v==='list');
 }
 
-function openDetail(id) {
-  const card = collection.find(c => c.id === id);
-  if (!card) return;
-  detailCardId = id;
-  const color = getSetColor(card.set);
-  const emoji = getEmoji(card.name);
-  document.getElementById('d-title').textContent = card.name;
-  document.getElementById('d-art').style.background = `${color}22`;
-  document.getElementById('d-art').innerHTML = `<span style="font-size:72px;">${emoji}</span>`;
-  document.getElementById('d-grid').innerHTML = `
-    <div class="detail-field"><div class="detail-field-label">Set</div><div>${card.set}</div></div>
-    <div class="detail-field"><div class="detail-field-label">Number</div><div>${card.number||'—'}</div></div>
-    <div class="detail-field"><div class="detail-field-label">Rarity</div><div><span class="rarity-badge ${RAR_MAP[card.rarity]}">${card.rarity}</span></div></div>
-    <div class="detail-field"><div class="detail-field-label">Condition</div><div><span class="card-condition ${COND_MAP[card.condition]}">${card.condition}</span></div></div>
-    <div class="detail-field"><div class="detail-field-label">Qty</div><div>${card.quantity}</div></div>
-    <div class="detail-field"><div class="detail-field-label">Language</div><div>${card.lang}</div></div>
-    ${card.notes ? `<div class="detail-field" style="grid-column:span2;"><div class="detail-field-label">Notes</div><div>${card.notes}</div></div>` : ''}
-  `;
-  document.getElementById('d-delete').onclick = () => deleteCard(card.id);
-  document.getElementById('detailModal').classList.add('open');
-}
+// ── Add card ───────────────────────────────────────────────────────────
+function openAddModal() { document.getElementById('addModal').classList.add('open'); }
 
-function renderCollection() {
+function addCard() {
+  const name = document.getElementById('f-name').value.trim();
+  const set = document.getElementById('f-set').value.trim();
+  if(!name || !set) { alert('Please fill in card name and set.'); return; }
+  const card = {
+    id: nextId(),
+    name,
+    set,
+    number: document.getElementById('f-number').value.trim(),
+    rarity: document.getElementById('f-rarity').value,
+    condition: document.getElementById('f-condition').value,
+    qty: parseInt(document.getElementById('f-qty').value)||1,
+    lang: document.getElementById('f-lang').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    added: Date.now(),
+  };
+  collection.unshift(card);
+  save();
+  closeModal('addModal');
+  ['f-name','f-set','f-number','f-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-qty').value='1';
+  activeSet='all'; activeRarity='all';
   applyFilters();
 }
 
-// ---------- AGENT CHAT ----------
-async function askAgent() {
-  const question = document.getElementById('agentQuestion').value;
-  if (!question.trim()) return;
-  const responseDiv = document.getElementById('agentResponse');
-  responseDiv.innerHTML = '🤔 Thinking...';
-  try {
-    const data = await apiFetch('/agent/ask', {
-      method: 'POST',
-      body: JSON.stringify({ question })
-    });
-    responseDiv.innerHTML = data.answer;
-  } catch (err) {
-    responseDiv.innerHTML = '❌ Error: ' + err.message;
-  }
+// ── Detail modal ───────────────────────────────────────────────────────
+function openDetail(id) {
+  const c = collection.find(x=>x.id===id);
+  if(!c) return;
+  detailIdx = id;
+  const color = getSetColor(c.set);
+  const emoji = getEmoji(c.name);
+  document.getElementById('d-title').textContent = c.name;
+  document.getElementById('d-art').style.background = `${color}22`;
+  document.getElementById('d-art').innerHTML = `<span style="font-size:72px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2));">${emoji}</span>`;
+  document.getElementById('d-grid').innerHTML = `
+    <div class="detail-field"><div class="detail-field-label">Set</div><div class="detail-field-val">${c.set}</div></div>
+    <div class="detail-field"><div class="detail-field-label">Number</div><div class="detail-field-val">${c.number||'—'}</div></div>
+    <div class="detail-field"><div class="detail-field-label">Rarity</div><div class="detail-field-val"><span class="rarity-badge ${RAR_MAP[c.rarity]}">${c.rarity}</span></div></div>
+    <div class="detail-field"><div class="detail-field-label">Condition</div><div class="detail-field-val"><span class="card-condition ${COND_MAP[c.condition]}">${c.condition}</span></div></div>
+    <div class="detail-field"><div class="detail-field-label">Quantity</div><div class="detail-field-val">${c.qty}</div></div>
+    <div class="detail-field"><div class="detail-field-label">Language</div><div class="detail-field-val">${c.lang}</div></div>
+    ${c.notes?`<div class="detail-field" style="grid-column:span 2;"><div class="detail-field-label">Notes</div><div class="detail-field-val" style="font-size:13px;">${c.notes}</div></div>`:''}
+    <div class="detail-field" style="grid-column:span 2;"><div class="detail-field-label">Added</div><div class="detail-field-val" style="font-size:13px;">${new Date(c.added).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div></div>
+  `;
+  document.getElementById('d-delete').onclick = () => deleteCard(id);
+  document.getElementById('detailModal').classList.add('open');
 }
 
-// ---------- MODALS ----------
-function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+function deleteCard(id) {
+  if(!confirm('Remove this card from your collection?')) return;
+  collection = collection.filter(c=>c.id!==id);
+  save();
+  closeModal('detailModal');
+  applyFilters();
+}
+
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Close on overlay click
 document.querySelectorAll('.modal-overlay').forEach(o=>{
   o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
 });
 
-// ---------- MOBILE TOGGLE ----------
+// Enter to add
+document.getElementById('addModal').addEventListener('keydown', e=>{ if(e.key==='Enter') addCard(); });
+
+// ── MOBILE TOGGLE ───────────────────────────────────────────────────────
 document.getElementById('mobileToggleBtn').addEventListener('click', () => {
   document.body.classList.toggle('mobile-view');
   const btn = document.getElementById('mobileToggleBtn');
   btn.textContent = document.body.classList.contains('mobile-view') ? '💻 Desktop view' : '📱 Mobile view';
 });
 
-// ---------- INIT ----------
-window.onload = () => {
-  if (!authToken) {
-    document.getElementById('loginModal').classList.add('open');
-  } else {
-    document.getElementById('logoutBtn').style.display = 'block';
-    loadCollection();
-  }
-  document.getElementById('logoutBtn').addEventListener('click', logout);
-};
+// ── Init ───────────────────────────────────────────────────────────────
+applyFilters();
 </script>
 </body>
 </html>
