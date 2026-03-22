@@ -2,7 +2,20 @@ const { OpenAI } = require('openai');
 
 headers = {"Authorization": f"Bearer {os.environ['CIVIC_TOKEN']}"}
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+export async function chatWithTools(messages: any[], civicToken: string) {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+  const mcp = await createMCP(civicToken);
+  const { tools } = await mcp.listTools();
+
+  const toolDefs = tools.map((t) => ({
+    type: 'function' as const,
+    function: {
+      name: t.name,
+      description: t.description,
+      parameters: t.inputSchema,
+    },
+  }));
 
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
