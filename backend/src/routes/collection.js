@@ -1,43 +1,64 @@
 const router = require('express').Router();
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const auth = require('../middleware/auth');
+const db = require('../services/db');
 
-// Get all cards for logged-in user
+router.use(auth);
+
 router.get('/', async (req, res) => {
-  const cards = await prisma.card.findMany({ where: { userId: req.userId } });
-  res.json(cards);
+  try {
+    const result = await db.query(
+      'SELECT * FROM "Card" WHERE "userId" = $1 ORDER BY "addedAt" DESC',
+      [req.userId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
-// Add a card
 router.post('/', async (req, res) => {
   const { name, set, number, rarity, condition, quantity, language, notes } = req.body;
-  const card = await prisma.card.create({
-    data: {
-      name, set, number, rarity, condition,
-      quantity: quantity || 1,
-      language: language || 'English',
-      notes,
-      userId: req.userId
-    }
-  });
-  res.json(card);
+  if (!name || !set) return res.status(400).json({ error: 'Name and set required' });
+  try {
+    const result = await db.query(
+      `INSERT INTO "Card" (name, set, number, rarity, condition, quantity, language, notes, "userId")
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      [name, set, number, rarity || 'Common', condition || 'Near Mint', quantity || 1, language || 'English', notes, req.userId]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to add card' });
+  }
 });
 
-// Update quantity or notes
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { quantity, notes } = req.body;
-  const card = await prisma.card.update({
-    where: { id, userId: req.userId },
-    data: { quantity, notes }
-  });
-  res.json(card);
+  try {
+    const result = await db.query(
+      'UPDATE "Card" SET quantity = $1, notes = $2 WHERE id = $3 AND "userId" = $4 RETURNING *',
+      [quantity, notes, id, req.userId]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Card not found' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Update failed' });
+  }
 });
 
-// Delete a card
 router.delete('/:id', async (req, res) => {
-  await prisma.card.delete({ where: { id: req.params.id, userId: req.userId } });
-  res.json({ success: true });
+  const { id } = req.params;
+  try {
+    const result = await db.query('DELETE FROM "Card" WHERE id = $1 AND "userId" = $2 RETURNING id', [id, req.userId]);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Card not found' });
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Delete failed' });
+  }
 });
 
 module.exports = router;

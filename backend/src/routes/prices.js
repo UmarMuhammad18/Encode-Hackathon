@@ -1,33 +1,22 @@
 const router = require('express').Router();
 const auth = require('../middleware/auth');
-const { fetchMarketPrice } = require('../services/tcgplayer');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const db = require('../services/db');
 
 router.use(auth);
 
-// Get market price for a specific card (by card ID)
 router.get('/:cardId', async (req, res) => {
   const { cardId } = req.params;
-  const card = await prisma.card.findFirst({
-    where: { id: cardId, userId: req.userId }
-  });
-  if (!card) {
-    return res.status(404).json({ error: 'Card not found' });
+  try {
+    const result = await db.query(
+      'SELECT "marketPrice", "lastPriceCheck" FROM "Card" WHERE id = $1 AND "userId" = $2',
+      [cardId, req.userId]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Card not found' });
+    res.json({ price: result.rows[0].marketPrice || null });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch price' });
   }
-
-  let price = card.marketPrice;
-  // Refresh if older than 24 hours
-  if (!card.lastPriceCheck || (Date.now() - new Date(card.lastPriceCheck) > 24 * 60 * 60 * 1000)) {
-    price = await fetchMarketPrice(card.name, card.set);
-    if (price !== null) {
-      await prisma.card.update({
-        where: { id: card.id },
-        data: { marketPrice: price, lastPriceCheck: new Date() }
-      });
-    }
-  }
-  res.json({ price });
 });
 
 module.exports = router;

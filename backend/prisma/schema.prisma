@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
 }
 
 datasource db {
@@ -14,7 +15,6 @@ model User {
   name      String?
   createdAt DateTime @default(now())
   cards     Card[]
-  alerts    Alert[]
 }
 
 model Card {
@@ -30,17 +30,6 @@ model Card {
   addedAt   DateTime @default(now())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  marketPrice Float?  // latest market price from API
+  marketPrice Float?
   lastPriceCheck DateTime?
-}
-
-model Alert {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  cardName  String
-  targetPrice Float
-  condition String?   // optional condition filter
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
 }

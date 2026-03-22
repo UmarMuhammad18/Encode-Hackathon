@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const authMiddleware = require('./middleware/auth');
 
 const app = express();
 app.use(helmet());
@@ -13,9 +12,11 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/collection', authMiddleware, require('./routes/collection'));
-app.use('/api/prices', authMiddleware, require('./routes/prices'));
-app.use('/api/agent', authMiddleware, require('./routes/agent'));
+app.use('/api/collection', require('./routes/collection'));
+app.use('/api/agent', require('./routes/agent'));
+app.use('/api/prices', require('./routes/prices'));
+
+app.get('/health', (req, res) => res.json({ status: 'ok', civic: !!process.env.CIVIC_API_KEY }));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
