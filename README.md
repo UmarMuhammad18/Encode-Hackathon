@@ -2,7 +2,7 @@
 
 PokéAgent is an intelligent assistant for Pokémon card collectors. It helps you track your collection, get market insights, and receive trading advice – all powered by AI with built‑in safety guardrails using Civic.
 
-![Demo](https://via.placeholder.com/800x400?text=Demo+Screenshot+Placeholder)
+![Demo]([https://via.placeholder.com/800x400?text=Demo+Screenshot+Placeholder](https://www.loom.com/share/23db0f7517ba44e29deb2de4ffd185a3))
 
 ## ✨ Features
 
