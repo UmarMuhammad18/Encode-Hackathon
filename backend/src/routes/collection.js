@@ -58,6 +58,24 @@ router.delete('/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Delete failed' });
+
+// Bulk import cards
+router.post('/bulk', async (req, res) => {
+  const cards = req.body.cards;
+  if (!Array.isArray(cards)) return res.status(400).json({ error: 'Invalid data' });
+  const inserted = [];
+  for (const card of cards) {
+    const { name, set, number, rarity, condition, quantity, language, notes } = card;
+    if (!name || !set) continue;
+    const result = await db.query(
+      `INSERT INTO "Card" (id, name, set, number, rarity, condition, quantity, language, notes, "addedAt", "userId")
+       VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, DEFAULT, $9) RETURNING *`,
+      [name, set, number, rarity || 'Common', condition || 'Near Mint', quantity || 1, language || 'English', notes, req.userId]
+    );
+    inserted.push(result.rows[0]);
+  }
+  res.json({ imported: inserted.length });
+});
   }
 });
 
