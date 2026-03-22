@@ -17,6 +17,54 @@ export async function chatWithTools(messages: any[], civicToken: string) {
     },
   }));
 
+  const toolDefs = tools.map((t) => ({
+    type: 'function' as const,
+    function: {
+      name: t.name,
+      description: t.description,
+      parameters: t.inputSchema,
+    },
+  }));
+
+  // Multi-turn tool loop — runs until the model stops requesting tools
+  let response = await openai.chat.completions.create({
+    model: 'gpt-3.5-turbo',
+    messages,
+    tools: toolDefs,
+    tool_choice: 'auto',
+  });
+
+  while (response.choices[0]?.finish_reason === 'tool_calls') {
+    const toolCalls = response.choices[0].message.tool_calls ?? [];
+    const toolResults = await Promise.all(
+      toolCalls.map(async (call) => {
+        const args = JSON.parse(call.function.arguments || '{}');
+        const result = await mcp.callTool({ name: call.function.name, arguments: args });
+        return {
+          role: 'tool' as const,
+          tool_call_id: call.id,
+          content: JSON.stringify(result.content),
+        };
+      })
+    );
+
+    messages = [
+      ...messages,
+      response.choices[0].message,
+      ...toolResults,
+    ];
+
+    response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages,
+      tools: toolDefs,
+    });
+  }
+
+  await mcp.close();
+  return response;
+}
+
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 
