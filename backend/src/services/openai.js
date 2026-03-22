@@ -20,7 +20,7 @@ async function createMCP(token: string) {
     }
   );
   const client = new Client(
-    { name: 'my-app', version: '1.0.0' },
+    { name: 'PokeAgent', version: '1.0.0' },
     { capabilities: {} }
   );
   await client.connect(transport);
