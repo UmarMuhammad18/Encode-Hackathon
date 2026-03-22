@@ -1,6 +1,31 @@
 const { OpenAI } = require('openai');
 
+headers = {"Authorization": f"Bearer {os.environ['CIVIC_TOKEN']}"}
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+
+async function createMCP(token: string) {
+  const transport = new StreamableHTTPClientTransport(
+    new URL(process.env.CIVIC_URL!),
+    {
+      requestInit: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    }
+  );
+  const client = new Client(
+    { name: 'my-app', version: '1.0.0' },
+    { capabilities: {} }
+  );
+  await client.connect(transport);
+  return client;
+}
 
 async function askAgent(question, collection) {
   const collectionSummary = collection.map(c =>
