@@ -706,6 +706,10 @@ body.mobile-view .list-row { grid-template-columns: 30px 2fr 1.5fr 70px 60px 30p
     </aside>
     <main class="main-content">
       <div class="toolbar"><div class="result-count"><strong id="resultCount">0</strong> cards</div><button class="btn-add" onclick="openAddModal()">+ Add Card</button></div>
+      <div class="toolbar-left">
+  <div class="result-count"><strong id="resultCount">0</strong> cards shown</div>
+    <div class="portfolio-value" id="portfolioValue">💰 Value: $0</div>
+  </div>
       <div class="card-grid" id="cardGrid"></div>
       <div id="listHeader" class="list-header" style="display:none;"><span></span><span>Name</span><span>Set</span><span>Number</span><span>Condition</span><span>Qty</span><span></span></div>
       <div class="card-list" id="cardList"></div>
@@ -851,6 +855,15 @@ async function loadCollection() {
     renderCollection();
     updateGlobalStats();
   } catch (err) { if (err.message.includes('Session')) logout(); }
+}
+
+async function updatePortfolioValue() {
+  try {
+    const data = await apiFetch('/prices/portfolio/value');
+    document.getElementById('portfolioValue').innerHTML = `💰 Value: $${data.totalValue.toFixed(2)}`;
+  } catch (err) {
+    console.error('Portfolio value error', err);
+  }
 }
 
 async function addCard() {
