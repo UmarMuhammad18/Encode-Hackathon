@@ -710,6 +710,10 @@ body.mobile-view .list-row { grid-template-columns: 30px 2fr 1.5fr 70px 60px 30p
   <div class="result-count"><strong id="resultCount">0</strong> cards shown</div>
     <div class="portfolio-value" id="portfolioValue">💰 Value: $0</div>
   </div>
+  <button class="btn-add" onclick="exportCollection()">📤 Export</button>
+  <label class="btn-add" style="cursor:pointer;">📥 Import
+    <input type="file" id="importFile" style="display:none;" accept=".json,.csv" onchange="importCollection(this)">
+  </label>
       <div class="card-grid" id="cardGrid"></div>
       <div id="listHeader" class="list-header" style="display:none;"><span></span><span>Name</span><span>Set</span><span>Number</span><span>Condition</span><span>Qty</span><span></span></div>
       <div class="card-list" id="cardList"></div>
@@ -901,6 +905,49 @@ async function deleteCard(id) {
     updateGlobalStats();
     updateHomeStats();
   } catch (err) { alert('Delete failed: ' + err.message); }
+}
+
+function exportCollection() {
+  const dataStr = JSON.stringify(collection, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pokemon-collection.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function importCollection(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const text = await file.text();
+  let cards;
+  if (file.name.endsWith('.json')) {
+    cards = JSON.parse(text);
+  } else if (file.name.endsWith('.csv')) {
+    // Simple CSV parsing: assume headers: name,set,number,rarity,condition,quantity,language,notes
+    const lines = text.split('\n');
+    const headers = lines[0].split(',');
+    cards = [];
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(',');
+      if (values.length < 2) continue;
+      const card = {};
+      headers.forEach((h, idx) => { card[h.trim()] = values[idx]?.trim(); });
+      cards.push(card);
+    }
+  }
+  if (!cards || !cards.length) return;
+  // Send to backend bulk endpoint
+  try {
+    await apiFetch('/collection/bulk', { method: 'POST', body: JSON.stringify({ cards }) });
+    await loadCollection(); // refresh
+    alert('Import successful');
+  } catch (err) {
+    alert('Import failed: ' + err.message);
+  }
+  input.value = ''; // reset
 }
 
 // ========== RENDERING HELPERS ==========
