@@ -79,4 +79,21 @@ router.post('/bulk', async (req, res) => {
   }
 });
 
+router.get('/analytics', auth, async (req, res) => {
+  try {
+    // Get counts by set
+    const sets = await db.query('SELECT set, COUNT(*) as count, SUM(quantity) as total_qty FROM "Card" WHERE "userId" = $1 GROUP BY set', [req.userId]);
+    // by rarity
+    const rarities = await db.query('SELECT rarity, COUNT(*) as count, SUM(quantity) as total_qty FROM "Card" WHERE "userId" = $1 GROUP BY rarity', [req.userId]);
+    // by condition
+    const conditions = await db.query('SELECT condition, COUNT(*) as count, SUM(quantity) as total_qty FROM "Card" WHERE "userId" = $1 GROUP BY condition', [req.userId]);
+    // total value (using marketPrice if available)
+    const value = await db.query('SELECT SUM(quantity * "marketPrice") as total FROM "Card" WHERE "userId" = $1 AND "marketPrice" IS NOT NULL', [req.userId]);
+    res.json({ sets: sets.rows, rarities: rarities.rows, conditions: conditions.rows, totalValue: value.rows[0]?.total || 0 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Analytics error' });
+  }
+});
+
 module.exports = router;
